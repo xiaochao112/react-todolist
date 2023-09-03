@@ -31,8 +31,9 @@ function App() {
   }, []);
   return (
     <>
-      <p>{userInfo.username}</p>
-      <MyRouter />
+      <div className=' w-screen h-screen flex flex-col relative'>
+        <MyRouter />
+      </div>
     </>
   );
 }
