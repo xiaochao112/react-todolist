@@ -4,31 +4,62 @@ import {
   UnorderedListOutlined,
   UserOutlined,
 } from '@ant-design/icons';
-import { Avatar, Input } from 'antd';
+import MyIcon from '@/components/common/MyIcon';
+import { Avatar, Input, Dropdown } from 'antd';
+import type { MenuProps } from 'antd';
+import { useState } from 'react';
+import Login from '@/components/common/Login';
 
 function NavBer() {
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+
+  const items: MenuProps['items'] = [
+    {
+      key: '1',
+      label: <p>主题设置</p>,
+    },
+    {
+      key: '2',
+      label: <p>更新日志</p>,
+    },
+    {
+      key: '3',
+      label: (
+        <p
+          onClick={() => {
+            setIsLoginModalOpen(true);
+          }}>
+          登录系统
+        </p>
+      ),
+    },
+  ];
   return (
     <>
       <div className=' w-full px-5 flex-shrink-0 primaryNavBarBgColor' style={{ height: 45 }}>
         <div className=' w-full h-full flex items-center justify-between'>
           <div className='flex items-center'>
-            <div className='  pr-5'>
-              <UnorderedListOutlined className=' flex text-xl' />
-            </div>
+            <MyIcon className=' mr-2' icon={<UnorderedListOutlined className=' flex text-xl' />} />
             <div>
               <Input placeholder='搜索' style={{ width: 200 }} prefix={<SearchOutlined />} />
             </div>
           </div>
           <div className='flex items-center'>
-            <div className=' pr-5'>
-              <PlusOutlined />
-            </div>
+            <MyIcon className=' mr-2' icon={<PlusOutlined className=' flex text-xl' />} />
             <div>
-              <Avatar style={{ backgroundColor: '#87d068' }} icon={<UserOutlined />} />
+              <Dropdown menu={{ items }}>
+                <Avatar style={{ backgroundColor: '#87d068' }} icon={<UserOutlined />} />
+              </Dropdown>
             </div>
           </div>
         </div>
       </div>
+      <Login
+        show={isLoginModalOpen}
+        handleCancel={() => {
+          setIsLoginModalOpen(false);
+        }}
+      />
     </>
   );
 }
