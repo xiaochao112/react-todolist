@@ -12,6 +12,7 @@ export default function reducer(state = UserState, action: actionT) {
       return info;
     case actionType.CLEAR_USERINFO:
       rmKey('user');
+      rmKey('token');
       return { isLogin: false, user: {} };
     default:
       return state;

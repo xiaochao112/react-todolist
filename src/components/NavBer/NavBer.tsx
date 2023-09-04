@@ -1,19 +1,42 @@
 import {
+  ExclamationCircleOutlined,
   PlusOutlined,
   SearchOutlined,
   UnorderedListOutlined,
   UserOutlined,
 } from '@ant-design/icons';
 import MyIcon from '@components/common/MyIcon';
-import { Avatar, Input, Dropdown } from 'antd';
+import { Avatar, Input, Dropdown, Modal, message } from 'antd';
 import type { MenuProps } from 'antd';
 import { useEffect, useState } from 'react';
 import LoginAndRegister from '@components/common/LoginAndRegister';
-import { useStateUserInfo } from '@store/hook';
-
+import { useStateUserInfo, useDispatchUser } from '@store/hook';
+const { confirm } = Modal;
+const showConfirm = (
+  stateClearUser: () => {
+    type: string;
+  },
+) => {
+  confirm({
+    title: '是否退出登录？',
+    icon: <ExclamationCircleOutlined />,
+    content: '',
+    okText: '确定',
+    cancelText: '取消',
+    onOk() {
+      stateClearUser();
+      message.success('已退出登录');
+    },
+    onCancel() {
+      console.log('Cancel');
+    },
+  });
+};
 function NavBer() {
+  const { stateClearUser } = useDispatchUser();
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const userInfo = useStateUserInfo();
+
   const loginItem: MenuProps['items'] = [
     {
       key: '3',
@@ -22,7 +45,8 @@ function NavBer() {
           className='ml-2'
           style={{
             width: 200,
-          }}>
+          }}
+          onClick={() => showConfirm(stateClearUser)}>
           退出登录
         </p>
       ),
