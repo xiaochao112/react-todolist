@@ -3,7 +3,7 @@ import { TUserLoginParams } from '@api/user/type';
 import { Form, Input, Button, message, FormInstance } from 'antd';
 import { encrypt, setKey } from '@utils';
 import { useDispatchUser } from '@store/hook';
-import { userInfo } from '@store/user/type';
+import { TInfo } from '@store/user/type';
 import { useState } from 'react';
 
 type TProps = {
@@ -11,9 +11,7 @@ type TProps = {
   onClose: () => void;
 };
 type PUseLoginType = {
-  stateSetUser: (info: userInfo) => {
-    info: userInfo;
-  };
+  stateSetUser: (info: TInfo) => { type: string; info: TInfo };
   form: FormInstance<TUserLoginParams>;
   onClose: () => void;
 };
@@ -32,7 +30,7 @@ function useLogin({ stateSetUser, onClose, form }: PUseLoginType): TResLogin {
       if (res.code === 200) {
         message.success(res.msg);
         const info = res.result.user;
-        stateSetUser(info);
+        stateSetUser({ isLogin: true, user: info });
         setKey('token', res.result.token);
         setBtnLoad(false);
         form.resetFields();

@@ -2,7 +2,7 @@ import { getKey, setKey, rmKey } from '@utils';
 import * as actionType from './actionType';
 import { actionT } from './type';
 
-const UserState = getKey('user') || null;
+const UserState = getKey('user') || { isLogin: false, user: {} };
 
 export default function reducer(state = UserState, action: actionT) {
   const { type, info } = action;
@@ -12,7 +12,7 @@ export default function reducer(state = UserState, action: actionT) {
       return info;
     case actionType.CLEAR_USERINFO:
       rmKey('user');
-      return null;
+      return { isLogin: false, user: {} };
     default:
       return state;
   }

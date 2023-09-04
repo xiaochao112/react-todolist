@@ -1,7 +1,10 @@
 import * as actionType from './actionType';
-import { userInfo } from './type';
+import { TInfo } from './type';
 
 // 设置用户信息
-export const setUserInfoAction = (info: userInfo) => ({ type: actionType.SET_USERINFO, info });
+export const setUserInfoAction = (info: TInfo) => ({
+  type: actionType.SET_USERINFO,
+  info,
+});
 // 清除用户信息
 export const clearUserInfoAction = () => ({ type: actionType.CLEAR_USERINFO });

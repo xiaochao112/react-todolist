@@ -1,3 +1,4 @@
+// 登录信息
 export type userInfo = {
   id: number;
   username: string;
@@ -6,8 +7,13 @@ export type userInfo = {
   phone: string;
   createTime: string;
 };
-
+// 用户信息
+export type TInfo = {
+  isLogin: boolean;
+  user: userInfo;
+};
+// state
 export type actionT = {
   type: string;
-  info: userInfo;
+  info: TInfo;
 };

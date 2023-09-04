@@ -1,11 +1,11 @@
 import { combineReducers } from 'redux';
 import UserReducer from './user/reducer';
 import { configureStore } from '@reduxjs/toolkit';
-import { userInfo } from '@/store/user/type';
+import { TInfo } from '@/store/user/type';
 
 // 定义state
 export type RootState = {
-  user: userInfo;
+  user: TInfo;
 };
 
 const reducer = combineReducers({
