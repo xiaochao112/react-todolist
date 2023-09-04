@@ -16,6 +16,7 @@
     "@reduxjs/toolkit": "^1.9.5",
     "antd": "^4.24.1",
     "axios": "^1.5.0",
+    "bcryptjs": "^2.4.3",
     "less": "^4.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -25,6 +26,7 @@
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^17.7.0",
+    "@types/bcryptjs": "^2.4.3",
     "@types/lodash": "^4.14.197",
     "@types/node": "^20.5.7",
     "@types/react": "^18.2.15",
