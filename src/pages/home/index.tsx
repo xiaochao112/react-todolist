@@ -4,7 +4,7 @@ import './index.less';
 function MyHome() {
   return (
     <>
-      <div className='flex'>
+      <div className='flex h-full'>
         <div className='w-full flex flex-col sliderBarShow primarySliderBarBackgroundColor'>
           <div className=' p-3'>
             <h3 className='text-desc font-bold'>日期</h3>
@@ -36,7 +36,7 @@ function MyHome() {
             </div>
           </div>
         </div>
-        <div className='content h-full'>内容</div>
+        <div className='content'>内容</div>
       </div>
     </>
   );

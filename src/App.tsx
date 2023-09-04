@@ -1,6 +1,6 @@
 import './var.less';
-import { userInfo } from '@/store/user/type';
-import { useStateUserInfo, useDispatchUser } from '@/store/hook';
+import { userInfo } from '@store/user/type';
+import { useStateUserInfo, useDispatchUser } from '@store/hook';
 import { useEffect } from 'react';
 import MyRouter from '@/router';
 

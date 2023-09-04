@@ -23,6 +23,46 @@ export default defineConfig({
         find: '@',
         replacement: resolve(__dirname, './src'),
       },
+      {
+        find: '@types',
+        replacement: resolve(__dirname, 'src/types'),
+      },
+      {
+        find: '@utils',
+        replacement: resolve(__dirname, 'src/utils'),
+      },
+      {
+        find: '@hooks',
+        replacement: resolve(__dirname, 'src/hooks'),
+      },
+      {
+        find: '@store',
+        replacement: resolve(__dirname, 'src/store'),
+      },
+      {
+        find: '@core',
+        replacement: resolve(__dirname, 'src/core'),
+      },
+      {
+        find: '@components',
+        replacement: resolve(__dirname, 'src/components'),
+      },
+      {
+        find: '@config',
+        replacement: resolve(__dirname, 'src/config'),
+      },
+      {
+        find: '@api',
+        replacement: resolve(__dirname, 'src/api'),
+      },
+      {
+        find: '@pages',
+        replacement: resolve(__dirname, 'src/pages'),
+      },
+      {
+        find: '@assets',
+        replacement: resolve(__dirname, 'src/assets'),
+      },
     ],
     extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.d.ts'], // 忽略后缀
   },

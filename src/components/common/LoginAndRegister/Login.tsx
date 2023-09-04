@@ -1,0 +1,79 @@
+import { login } from '@api/user';
+import { TUserLoginParams } from '@api/user/type';
+import { Form, Input, Button } from 'antd';
+
+type TProps = {
+  setModalType: () => void;
+  onClose: () => void;
+};
+const tailLayout = {
+  wrapperCol: { offset: 8, span: 16 },
+};
+const Login = ({ setModalType, onClose }: TProps) => {
+  const [form] = Form.useForm();
+
+  const onFinish = async (values: TUserLoginParams) => {
+    console.log('Success:', values);
+    await login(values);
+    onClose();
+    form.resetFields();
+  };
+
+  const onFinishFailed = (errorInfo: object) => {
+    console.log('Failed:', errorInfo);
+  };
+
+  return (
+    <>
+      <Form
+        name='basic'
+        initialValues={{}}
+        onFinish={onFinish}
+        onFinishFailed={onFinishFailed}
+        autoComplete='off'
+        labelCol={{ span: 6 }}
+        wrapperCol={{ span: 16 }}>
+        <Form.Item
+          label='手机号'
+          name='phone'
+          rules={[
+            { required: true, message: '请输入手机号码！' },
+            {
+              pattern: /^1(3[0-9]|4[01456879]|5[0-3,5-9]|6[2567]|7[0-8]|8[0-9]|9[0-3,5-9])\d{8}$/,
+              message: '请输入正确的手机号',
+            },
+          ]}>
+          <Input />
+        </Form.Item>
+
+        <Form.Item
+          label='密码'
+          name='password'
+          rules={[
+            { required: true, message: '请输入密码!' },
+            { min: 6, message: '密码最少6位' },
+            { max: 12, message: '密码最多12位' },
+          ]}>
+          <Input.Password maxLength={12} />
+        </Form.Item>
+        <Form.Item {...tailLayout}>
+          <Button type='primary' htmlType='submit'>
+            确定
+          </Button>
+
+          <Button
+            type='link'
+            htmlType='button'
+            onClick={() => {
+              setModalType();
+              form.resetFields();
+            }}>
+            没有账号 立即注册
+          </Button>
+        </Form.Item>
+      </Form>
+    </>
+  );
+};
+
+export default Login;

@@ -4,11 +4,11 @@ import {
   UnorderedListOutlined,
   UserOutlined,
 } from '@ant-design/icons';
-import MyIcon from '@/components/common/MyIcon';
+import MyIcon from '@components/common/MyIcon';
 import { Avatar, Input, Dropdown } from 'antd';
 import type { MenuProps } from 'antd';
 import { useState } from 'react';
-import Login from '@/components/common/Login';
+import LoginAndRegister from '@components/common/LoginAndRegister';
 
 function NavBer() {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
@@ -29,7 +29,7 @@ function NavBer() {
           onClick={() => {
             setIsLoginModalOpen(true);
           }}>
-          登录系统
+          立即登录
         </p>
       ),
     },
@@ -54,7 +54,7 @@ function NavBer() {
           </div>
         </div>
       </div>
-      <Login
+      <LoginAndRegister
         show={isLoginModalOpen}
         handleCancel={() => {
           setIsLoginModalOpen(false);
