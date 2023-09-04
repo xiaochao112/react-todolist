@@ -1,23 +1,41 @@
 import { register } from '@api/user';
 import { TUserRegisterParams } from '@api/user/type';
 import { Form, Input, Button, message } from 'antd';
+import { encrypt } from '@utils';
+import { useState } from 'react';
+
 type TProps = {
   setModalType: () => void;
   onClose: () => void;
 };
+type TResLogin = [btnLoad: boolean, onFinish: (values: TUserRegisterParams) => Promise<void>];
+
 const tailLayout = {
   wrapperCol: { offset: 8, span: 16 },
 };
+// 注册
+function useRegister(): TResLogin {
+  const [btnLoad, setBtnLoad] = useState(false);
+  const onFinish = async (values: TUserRegisterParams) => {
+    setBtnLoad(true);
+    try {
+      values.password = await encrypt(values.password);
+      const res = await register(values);
+      if (res.code === 200) {
+        message.success(res.result);
+        setBtnLoad(false);
+      }
+    } catch (error) {
+      console.log(error);
+      setBtnLoad(false);
+    }
+  };
+  return [btnLoad, onFinish];
+}
+
 const Register = ({ setModalType }: TProps) => {
   const [form] = Form.useForm();
-
-  const onFinish = async (values: TUserRegisterParams) => {
-    console.log('Success:', values);
-    await register(values);
-    message.success('注册成功！请返回登录');
-    form.resetFields();
-  };
-
+  const [btnLoad, onFinish] = useRegister();
   const onFinishFailed = (errorInfo: object) => {
     console.log('Failed:', errorInfo);
   };
@@ -25,6 +43,7 @@ const Register = ({ setModalType }: TProps) => {
   return (
     <>
       <Form
+        form={form}
         name='basic'
         initialValues={{}}
         onFinish={onFinish}
@@ -34,7 +53,7 @@ const Register = ({ setModalType }: TProps) => {
         wrapperCol={{ span: 16 }}>
         <Form.Item
           label='用户名'
-          name='usename'
+          name='username'
           rules={[{ required: true, message: '请输入用户名！' }]}>
           <Input />
         </Form.Item>
@@ -62,7 +81,7 @@ const Register = ({ setModalType }: TProps) => {
           <Input.Password maxLength={12} />
         </Form.Item>
         <Form.Item {...tailLayout}>
-          <Button type='primary' htmlType='submit'>
+          <Button type='primary' htmlType='submit' loading={btnLoad}>
             注册
           </Button>
 

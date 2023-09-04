@@ -1,24 +1,55 @@
 import { login } from '@api/user';
 import { TUserLoginParams } from '@api/user/type';
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button, message, FormInstance } from 'antd';
+import { encrypt, setKey } from '@utils';
+import { useDispatchUser } from '@store/hook';
+import { userInfo } from '@store/user/type';
+import { useState } from 'react';
 
 type TProps = {
   setModalType: () => void;
   onClose: () => void;
 };
+type PUseLoginType = {
+  stateSetUser: (info: userInfo) => {
+    info: userInfo;
+  };
+  form: FormInstance<TUserLoginParams>;
+  onClose: () => void;
+};
+type TResLogin = [btnLoad: boolean, onFinish: (values: TUserLoginParams) => Promise<void>];
+
 const tailLayout = {
   wrapperCol: { offset: 8, span: 16 },
 };
+function useLogin({ stateSetUser, onClose, form }: PUseLoginType): TResLogin {
+  const [btnLoad, setBtnLoad] = useState(false);
+  const onFinish = async (values: TUserLoginParams) => {
+    setBtnLoad(true);
+    try {
+      values.password = await encrypt(values.password);
+      const res = await login(values);
+      if (res.code === 200) {
+        message.success(res.msg);
+        const info = res.result.user;
+        stateSetUser(info);
+        setKey('token', res.result.token);
+        setBtnLoad(false);
+        form.resetFields();
+        onClose();
+      }
+    } catch (error) {
+      console.log(error);
+      setBtnLoad(false);
+    }
+  };
+  return [btnLoad, onFinish];
+}
+
 const Login = ({ setModalType, onClose }: TProps) => {
   const [form] = Form.useForm();
-
-  const onFinish = async (values: TUserLoginParams) => {
-    console.log('Success:', values);
-    await login(values);
-    onClose();
-    form.resetFields();
-  };
-
+  const { stateSetUser } = useDispatchUser(); // 设置用户信息
+  const [btnLoad, onFinish] = useLogin({ stateSetUser, form, onClose });
   const onFinishFailed = (errorInfo: object) => {
     console.log('Failed:', errorInfo);
   };
@@ -26,6 +57,7 @@ const Login = ({ setModalType, onClose }: TProps) => {
   return (
     <>
       <Form
+        form={form}
         name='basic'
         initialValues={{}}
         onFinish={onFinish}
@@ -57,7 +89,7 @@ const Login = ({ setModalType, onClose }: TProps) => {
           <Input.Password maxLength={12} />
         </Form.Item>
         <Form.Item {...tailLayout}>
-          <Button type='primary' htmlType='submit'>
+          <Button type='primary' htmlType='submit' loading={btnLoad}>
             确定
           </Button>
 
