@@ -1,2 +1,2 @@
-export * from './stirage';
+export * from './storage';
 export * from './bcrypt';
