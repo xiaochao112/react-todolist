@@ -1,6 +1,6 @@
 import { TaskType } from './taskType/type';
 
-export type TaskItem = {
+export type TTaskItem = {
   taskId: number;
   userId: number;
   typeId: number;
@@ -16,7 +16,7 @@ export type TaskItem = {
 
 export type TUserTaskList = {
   total: number;
-  result: TaskItem[];
+  result: TTaskItem[];
   page: number;
   typeId?: number | undefined;
 };

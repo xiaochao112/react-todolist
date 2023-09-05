@@ -2,9 +2,10 @@ import { PlusCircleOutlined } from '@ant-design/icons';
 import empty from '@assets/img/empty.jpg';
 import { Button } from 'antd';
 import TaskItem from './Tasks/TaskItem';
+import { TTaskItem } from '@api/task/type';
 
 type TProps = {
-  taskList: string[];
+  taskList: TTaskItem[];
 };
 
 function Content({ taskList }: TProps) {
