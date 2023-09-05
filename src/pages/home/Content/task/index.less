@@ -1,0 +1,23 @@
+.task-item {
+  .ant-checkbox-inner{
+    border-radius: 50% !important;
+  }
+}
+
+.task-item:hover{
+  box-shadow: 0 0 5px #fff;
+  background-color: #eee;
+  // &>.snow-delete-btn{
+  //   display: block !important;
+  // }
+}
+
+.task-item::after{
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  background-color: #f0f0f0;
+  left: 0;
+  bottom: 0;
+}
