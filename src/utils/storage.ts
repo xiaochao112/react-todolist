@@ -8,7 +8,8 @@ function getStorage(isLocal?: boolean) {
  * @param {boolean} isLocal 是否临时存储，默认是本地
  */
 export function setKey(key: string, data: object | string, isLocal?: boolean) {
-  getStorage(isLocal).setItem(key, JSON.stringify(data));
+  data = typeof data === 'object' ? JSON.stringify(data) : data;
+  getStorage(isLocal).setItem(key, data);
 }
 
 /**

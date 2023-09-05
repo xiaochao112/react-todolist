@@ -1,12 +1,13 @@
 import { PlusCircleOutlined } from '@ant-design/icons';
 import empty from '@assets/img/empty.jpg';
 import { Button } from 'antd';
-import { useEffect, useState } from 'react';
-import TaskItem from './task/taskItem';
+import TaskItem from './Tasks/TaskItem';
 
-function Content() {
-  const [taskList, setTaskList] = useState([{ id: 1 }, { id: 2 }]);
-  useEffect(() => {}, [taskList]);
+type TProps = {
+  taskList: string[];
+};
+
+function Content({ taskList }: TProps) {
   return (
     <>
       <div className=' h-full pt-5' style={{ width: 800 }}>
