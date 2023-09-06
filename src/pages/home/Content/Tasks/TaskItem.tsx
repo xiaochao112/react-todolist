@@ -3,6 +3,8 @@ import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import './index.less';
 import { CarryOutOutlined, DeleteOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import { TTaskItem } from '@api/task/type';
+import moment from 'moment';
+import dayjs from 'dayjs';
 
 type TPorps = {
   item: TTaskItem;
@@ -26,7 +28,7 @@ function TaskItem({ item, delItem }: TPorps) {
           </div>
           <div>
             <CarryOutOutlined className='mr-1' />
-            <span>2023-09-05~2023-09-05</span>
+            <span>{dayjs(+item.createTime).format('YYYY-MM-DD - h:mm:ss - a')}</span>
           </div>
         </div>
         <Popconfirm
