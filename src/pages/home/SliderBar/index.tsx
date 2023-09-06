@@ -6,10 +6,14 @@ import { useEffect, useState } from 'react';
 import { STime } from './type';
 import { TSaerchParams } from '..';
 import { getTimeByIndex } from './core';
+import { DatePicker } from 'antd';
+import 'moment/locale/zh-cn';
+import locale from 'antd/es/date-picker/locale/zh_CN';
+
 type TPorps = {
   onSearchChange: (data: TSaerchParams) => void; // search数据监听
 };
-
+const { RangePicker } = DatePicker;
 function SliderBar({ onSearchChange }: TPorps) {
   const [timeIndex, setTimeIndex] = useState<STime>(timeListConst[0].type);
   const [taskStatusIndex, setTaskStatusIndex] = useState<number>(0);
@@ -43,6 +47,7 @@ function SliderBar({ onSearchChange }: TPorps) {
                 }}
               />
             ))}
+            <div>{timeIndex === STime.自定义 && <RangePicker locale={locale} />}</div>
           </div>
         </div>
         <div className=' p-3'>

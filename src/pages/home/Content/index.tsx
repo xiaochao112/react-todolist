@@ -5,6 +5,7 @@ import TaskItem from './Tasks/TaskItem';
 import { TTaskItem } from '@api/task/type';
 import { delTaskItem } from '@api/task';
 import { TSaerchParams } from '..';
+import { getFullTimeByIndex, getTimeTextByIndex } from '../util';
 
 type TProps = {
   taskList: TTaskItem[];
@@ -12,13 +13,17 @@ type TProps = {
   searchTime: TSaerchParams;
 };
 
-function Content({ taskList, getList }: TProps) {
+function Content({ taskList, getList, searchTime }: TProps) {
   return (
     <>
       <div className=' h-full pt-5' style={{ width: 800 }}>
         <div>
-          <h3 className='font-bold inline-block mr-1'>其他时间</h3>
-          <span className='text-xs text-desc'>2023-09-05~2023-09-05</span>
+          <h3 className='font-bold inline-block mr-1'>
+            {getTimeTextByIndex(searchTime?.timeIndex)}
+          </h3>
+          <span className='text-xs text-desc'>
+            {getFullTimeByIndex(searchTime?.timeIndex, searchTime?.startTime, searchTime?.endTime)}
+          </span>
         </div>
         {taskList?.map((item, index) => (
           <TaskItem
