@@ -8,3 +8,7 @@ export type TaskType = {
   themeColor?: string;
   icon?: string;
 };
+
+export type TDelTaskTypeParams = {
+  typeId: number;
+};

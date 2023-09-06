@@ -3,3 +3,8 @@ export type resStatus = {
   code: number;
   msg: string;
 };
+
+export interface TResponseMsg {
+  code: number;
+  result: string;
+}

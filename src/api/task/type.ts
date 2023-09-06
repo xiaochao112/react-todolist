@@ -35,3 +35,6 @@ export type TResTaskList = {
   message: number;
   result?: TUserTaskList;
 };
+export type TDelTaskParams = {
+  taskId: number;
+};
