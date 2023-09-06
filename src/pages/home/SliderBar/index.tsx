@@ -2,12 +2,29 @@ import { PlusOutlined } from '@ant-design/icons';
 import MyIcon from '@components/common/MyIcon';
 import MenuItem from './menuItem';
 import { taskStatusListConst, timeListConst } from './content';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { STime } from './type';
+import { TSaerchParams } from '..';
+import { getTimeByIndex } from './core';
+type TPorps = {
+  onSearchChange: (data: TSaerchParams) => void; // search数据监听
+};
 
-function SliderBar() {
+function SliderBar({ onSearchChange }: TPorps) {
   const [timeIndex, setTimeIndex] = useState<STime>(timeListConst[0].type);
   const [taskStatusIndex, setTaskStatusIndex] = useState<number>(0);
+
+  const handleSearch = () => {
+    const [startTime, endTime] = getTimeByIndex(timeIndex);
+
+    const date = { startTime, endTime, timeIndex, status: taskStatusIndex };
+    console.log(date, 'date');
+    onSearchChange(date);
+  };
+  useEffect(() => {
+    handleSearch();
+    return () => {};
+  }, [timeIndex, taskStatusIndex]);
 
   return (
     <>

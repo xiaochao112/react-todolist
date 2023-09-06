@@ -4,10 +4,12 @@ import { Button, message } from 'antd';
 import TaskItem from './Tasks/TaskItem';
 import { TTaskItem } from '@api/task/type';
 import { delTaskItem } from '@api/task';
+import { TSaerchParams } from '..';
 
 type TProps = {
   taskList: TTaskItem[];
   getList: () => void;
+  searchTime: TSaerchParams;
 };
 
 function Content({ taskList, getList }: TProps) {
