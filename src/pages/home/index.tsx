@@ -38,6 +38,7 @@ function MyHome() {
             setTaskList(res.result!.result);
           }
         } else {
+          setIsFetching(false);
           setTaskList([]);
         }
       }
