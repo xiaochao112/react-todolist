@@ -2,13 +2,12 @@ import { PlusOutlined } from '@ant-design/icons';
 import MyIcon from '@components/common/MyIcon';
 import MenuItem from './menuItem';
 import { taskStatusListConst, timeListConst } from './content';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { STime } from './type';
 import { TSaerchParams } from '..';
-import { getTimeByIndex } from './core';
+import { getCurrentMonthsTime, getTimeByIndex, getTimeStringByDate } from './core';
 import { DatePicker } from 'antd';
-import 'moment/locale/zh-cn';
-import locale from 'antd/es/date-picker/locale/zh_CN';
+import moment from 'moment';
 
 type TPorps = {
   onSearchChange: (data: TSaerchParams) => void; // search数据监听
@@ -17,13 +16,24 @@ const { RangePicker } = DatePicker;
 function SliderBar({ onSearchChange }: TPorps) {
   const [timeIndex, setTimeIndex] = useState<STime>(timeListConst[0].type);
   const [taskStatusIndex, setTaskStatusIndex] = useState<number>(0);
+  const dateRangeValue = useRef<[moment.Moment, moment.Moment]>([
+    moment(moment(new Date()).subtract(1, 'month').format('YYYY/MM/DD')),
+    moment(new Date(), 'YYYY/MM/DD'),
+  ]); // 自定义时间
+
+  const timeStr = useRef<number[]>([0, 0]);
 
   const handleSearch = () => {
     const [startTime, endTime] = getTimeByIndex(timeIndex);
-
-    const date = { startTime, endTime, timeIndex, status: taskStatusIndex };
-    console.log(date, 'date');
-    onSearchChange(date);
+    const data = { startTime, endTime, timeIndex, status: taskStatusIndex };
+    if (timeIndex === STime.自定义 && !timeStr.current[0]) {
+      timeStr.current = getCurrentMonthsTime();
+    }
+    if (timeIndex === STime.自定义 && timeStr.current[0]) {
+      data.startTime = timeStr.current[0];
+      data.endTime = timeStr.current[1];
+    }
+    onSearchChange(data);
   };
   useEffect(() => {
     handleSearch();
@@ -47,7 +57,24 @@ function SliderBar({ onSearchChange }: TPorps) {
                 }}
               />
             ))}
-            <div>{timeIndex === STime.自定义 && <RangePicker locale={locale} />}</div>
+            <div>
+              {timeIndex === STime.自定义 && (
+                <RangePicker
+                  value={dateRangeValue.current}
+                  defaultValue={dateRangeValue.current}
+                  onChange={(data) => {
+                    const res = data?.map((item) => item?.format('YYYY/MM/DD'));
+                    // ts-ignore
+                    const timpStr = [
+                      getTimeStringByDate(res![0], 'start'),
+                      getTimeStringByDate(res![1], 'end'),
+                    ];
+                    timeStr.current = timpStr;
+                    handleSearch();
+                  }}
+                />
+              )}
+            </div>
           </div>
         </div>
         <div className=' p-3'>
