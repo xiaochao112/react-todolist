@@ -50,6 +50,8 @@ function SliderBar({ onSearchChange }: TPorps) {
               <MenuItem
                 key={index}
                 text={item.text}
+                isShowDel={false}
+                isShowEdit={false}
                 checked={item.type === timeIndex}
                 icon={item.icon}
                 onClick={() => {
@@ -84,6 +86,8 @@ function SliderBar({ onSearchChange }: TPorps) {
               <MenuItem
                 key={index}
                 text={item.statusName}
+                isShowDel={false}
+                isShowEdit={false}
                 checked={index === taskStatusIndex}
                 icon={item.icon}
                 onClick={() => {
@@ -101,9 +105,19 @@ function SliderBar({ onSearchChange }: TPorps) {
             </div>
           </div>
           <div>
-            <p>11111111</p>
-            <p>11111111</p>
-            <p>11111111</p>
+            {taskStatusListConst.map((item, index) => (
+              <MenuItem
+                key={index}
+                text={item.statusName}
+                checked={false}
+                isShowDel={true}
+                isShowEdit={true}
+                icon={item.icon}
+                onClick={() => {
+                  setTaskStatusIndex(index);
+                }}
+              />
+            ))}
           </div>
         </div>
       </div>
