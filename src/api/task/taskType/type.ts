@@ -12,3 +12,8 @@ export type TaskType = {
 export type TDelTaskTypeParams = {
   typeId: number;
 };
+
+export type TResTaskTypeList = {
+  code: number;
+  result?: TaskType[];
+};

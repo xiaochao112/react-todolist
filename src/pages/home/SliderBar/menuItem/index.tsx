@@ -20,14 +20,14 @@ function MenuItem({ text, icon, checked, isShowDel, isShowEdit, ...args }: TPorp
         {icon}
         <span className=' ml-2'>{text}</span>
         <div className='float-right'>
-          {isShowEdit && <EditOutlined className='cursor-pointer mr-3' />}
+          {isShowEdit && <EditOutlined className='sliderBar_menuItem-icon cursor-pointer mr-3' />}
           {isShowDel && (
             <Popconfirm
               okText='确定'
               cancelText='取消'
               title='确定删除该任务吗？'
               icon={<QuestionCircleOutlined style={{ color: 'red' }} />}>
-              <DeleteOutlined className='cursor-pointer' />
+              <DeleteOutlined className='sliderBar_menuItem-icon cursor-pointer' />
             </Popconfirm>
           )}
         </div>

@@ -1,4 +1,4 @@
-import { PlusOutlined } from '@ant-design/icons';
+import { CheckCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import MyIcon from '@components/common/MyIcon';
 import MenuItem from './menuItem';
 import { taskStatusListConst, timeListConst } from './content';
@@ -8,11 +8,25 @@ import { TSaerchParams } from '..';
 import { getCurrentMonthsTime, getTimeByIndex, getTimeStringByDate } from './core';
 import { DatePicker } from 'antd';
 import moment from 'moment';
+import { getTaskTypeList } from '@api/task/taskType';
+import { TaskType } from '@api/task/taskType/type';
 
 type TPorps = {
   onSearchChange: (data: TSaerchParams) => void; // search数据监听
 };
+type TTaskType = {
+  taskTypeList: React.MutableRefObject<TaskType[]>;
+  ignore: boolean;
+};
 const { RangePicker } = DatePicker;
+
+async function getTaskType({ taskTypeList, ignore }: TTaskType) {
+  const res = await getTaskTypeList();
+  if (!ignore) {
+    taskTypeList.current = res.result!;
+  }
+}
+
 function SliderBar({ onSearchChange }: TPorps) {
   const [timeIndex, setTimeIndex] = useState<STime>(timeListConst[0].type);
   const [taskStatusIndex, setTaskStatusIndex] = useState<number>(0);
@@ -20,9 +34,9 @@ function SliderBar({ onSearchChange }: TPorps) {
     moment(moment(new Date()).subtract(1, 'month').format('YYYY/MM/DD')),
     moment(new Date(), 'YYYY/MM/DD'),
   ]); // 自定义时间
-
-  const timeStr = useRef<number[]>([0, 0]);
-
+  const timeStr = useRef<number[]>([0, 0]); // 自定义时间戳
+  const taskTypeList = useRef<TaskType[]>([]); // 任务类型列表
+  // 监听查询变化
   const handleSearch = () => {
     const [startTime, endTime] = getTimeByIndex(timeIndex);
     const data = { startTime, endTime, timeIndex, status: taskStatusIndex };
@@ -35,6 +49,15 @@ function SliderBar({ onSearchChange }: TPorps) {
     }
     onSearchChange(data);
   };
+
+  useEffect(() => {
+    let ignore = false;
+    getTaskType({ taskTypeList, ignore });
+    return () => {
+      ignore = true;
+    };
+  }, []);
+
   useEffect(() => {
     handleSearch();
     return () => {};
@@ -105,14 +128,21 @@ function SliderBar({ onSearchChange }: TPorps) {
             </div>
           </div>
           <div>
-            {taskStatusListConst.map((item, index) => (
+            {taskTypeList.current?.map((item, index) => (
               <MenuItem
                 key={index}
-                text={item.statusName}
+                text={item.typeName}
                 checked={false}
                 isShowDel={true}
                 isShowEdit={true}
-                icon={item.icon}
+                icon={
+                  <CheckCircleOutlined
+                    className='text-lg '
+                    style={{
+                      color: '#2ecc71',
+                    }}
+                  />
+                }
                 onClick={() => {
                   setTaskStatusIndex(index);
                 }}
