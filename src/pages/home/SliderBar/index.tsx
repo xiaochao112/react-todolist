@@ -10,6 +10,7 @@ import { DatePicker } from 'antd';
 import moment from 'moment';
 import { getTaskTypeList } from '@api/task/taskType';
 import { TaskType } from '@api/task/taskType/type';
+import TaskTypeModal from '../Content/Tasks/TaskTypeModal';
 
 type TPorps = {
   onSearchChange: (data: TSaerchParams) => void; // search数据监听
@@ -28,8 +29,9 @@ async function getTaskType({ taskTypeList, ignore }: TTaskType) {
 }
 
 function SliderBar({ onSearchChange }: TPorps) {
-  const [timeIndex, setTimeIndex] = useState<STime>(timeListConst[0].type);
-  const [taskStatusIndex, setTaskStatusIndex] = useState<number>(0);
+  const [timeIndex, setTimeIndex] = useState<STime>(timeListConst[0].type); // 当前选中的日期区间
+  const [taskStatusIndex, setTaskStatusIndex] = useState<number>(0); // 当前选择的状态
+  const [showTaskTypeModal, setShowTaskTypeModal] = useState(false); // 是否显示类型对话框
   const dateRangeValue = useRef<[moment.Moment, moment.Moment]>([
     moment(moment(new Date()).subtract(1, 'month').format('YYYY/MM/DD')),
     moment(new Date(), 'YYYY/MM/DD'),
@@ -73,8 +75,6 @@ function SliderBar({ onSearchChange }: TPorps) {
               <MenuItem
                 key={index}
                 text={item.text}
-                isShowDel={false}
-                isShowEdit={false}
                 checked={item.type === timeIndex}
                 icon={item.icon}
                 onClick={() => {
@@ -109,8 +109,6 @@ function SliderBar({ onSearchChange }: TPorps) {
               <MenuItem
                 key={index}
                 text={item.statusName}
-                isShowDel={false}
-                isShowEdit={false}
                 checked={index === taskStatusIndex}
                 icon={item.icon}
                 onClick={() => {
@@ -123,7 +121,10 @@ function SliderBar({ onSearchChange }: TPorps) {
         <div className=' p-3'>
           <div className='flex justify-between'>
             <h3 className='text-desc font-bold'>任务类型</h3>
-            <div>
+            <div
+              onClick={() => {
+                setShowTaskTypeModal(true);
+              }}>
               <MyIcon className=' mr-2' icon={<PlusOutlined className=' flex text-xl' />} />
             </div>
           </div>
@@ -132,9 +133,8 @@ function SliderBar({ onSearchChange }: TPorps) {
               <MenuItem
                 key={index}
                 text={item.typeName}
-                checked={false}
-                isShowDel={true}
-                isShowEdit={true}
+                isShowDel
+                isShowEdit
                 icon={
                   <CheckCircleOutlined
                     className='text-lg '
@@ -151,6 +151,15 @@ function SliderBar({ onSearchChange }: TPorps) {
           </div>
         </div>
       </div>
+      <TaskTypeModal
+        show={showTaskTypeModal}
+        handleCancel={() => {
+          setShowTaskTypeModal(false);
+        }}
+        onFinish={(values: any) => {
+          console.log(values, 'form');
+        }}
+      />
     </>
   );
 }

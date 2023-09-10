@@ -5,9 +5,9 @@ import { DeleteOutlined, EditOutlined, QuestionCircleOutlined } from '@ant-desig
 interface TPorps extends HTMLAttributes<HTMLDivElement> {
   text: string;
   icon: ReactNode;
-  checked: boolean;
-  isShowDel: boolean;
-  isShowEdit: boolean;
+  checked?: boolean;
+  isShowDel?: boolean;
+  isShowEdit?: boolean;
 }
 
 function MenuItem({ text, icon, checked, isShowDel, isShowEdit, ...args }: TPorps) {
