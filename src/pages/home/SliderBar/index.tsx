@@ -95,6 +95,7 @@ function SliderBar({ onSearchChange }: TPorps) {
                       getTimeStringByDate(res![1], 'end'),
                     ];
                     timeStr.current = timpStr;
+                    dateRangeValue.current = [moment(timpStr[0]), moment(timpStr[1])];
                     handleSearch();
                   }}
                 />
