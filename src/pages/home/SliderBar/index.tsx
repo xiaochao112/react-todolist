@@ -1,4 +1,4 @@
-import { CheckCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import Icon, { PlusOutlined } from '@ant-design/icons';
 import MyIcon from '@components/common/MyIcon';
 import MenuItem from './menuItem';
 import { taskStatusListConst, timeListConst } from './content';
@@ -11,6 +11,7 @@ import moment from 'moment';
 import { getTaskTypeList } from '@api/task/taskType';
 import { TaskType } from '@api/task/taskType/type';
 import TaskTypeModal from '../Content/Tasks/TaskTypeModal';
+import * as icons from '@ant-design/icons';
 
 type TPorps = {
   onSearchChange: (data: TSaerchParams) => void; // search数据监听
@@ -31,13 +32,16 @@ async function getTaskType({ taskTypeList, ignore }: TTaskType) {
 function SliderBar({ onSearchChange }: TPorps) {
   const [timeIndex, setTimeIndex] = useState<STime>(timeListConst[0].type); // 当前选中的日期区间
   const [taskStatusIndex, setTaskStatusIndex] = useState<number>(0); // 当前选择的状态
-  const [showTaskTypeModal, setShowTaskTypeModal] = useState(false); // 是否显示类型对话框
+  const [showTaskTypeModal, setShowTaskTypeModal] = useState(true); // 是否显示类型对话框
   const dateRangeValue = useRef<[moment.Moment, moment.Moment]>([
     moment(moment(new Date()).subtract(1, 'month').format('YYYY/MM/DD')),
     moment(new Date(), 'YYYY/MM/DD'),
   ]); // 自定义时间
   const timeStr = useRef<number[]>([0, 0]); // 自定义时间戳
   const taskTypeList = useRef<TaskType[]>([]); // 任务类型列表
+
+  const titleModal = useRef<'add' | 'edit'>('add'); // 类型对话框
+
   // 监听查询变化
   const handleSearch = () => {
     const [startTime, endTime] = getTimeByIndex(timeIndex);
@@ -136,14 +140,7 @@ function SliderBar({ onSearchChange }: TPorps) {
                 text={item.typeName}
                 isShowDel
                 isShowEdit
-                icon={
-                  <CheckCircleOutlined
-                    className='text-lg '
-                    style={{
-                      color: '#2ecc71',
-                    }}
-                  />
-                }
+                icon={renderIcon(item.icon, item.themeColor)}
                 onClick={() => {
                   setTaskStatusIndex(index);
                 }}
@@ -153,6 +150,7 @@ function SliderBar({ onSearchChange }: TPorps) {
         </div>
       </div>
       <TaskTypeModal
+        title={titleModal.current}
         show={showTaskTypeModal}
         handleCancel={() => {
           setShowTaskTypeModal(false);
@@ -164,4 +162,13 @@ function SliderBar({ onSearchChange }: TPorps) {
     </>
   );
 }
+// 渲染图标
+function renderIcon(iconName?: string, themeColor?: string) {
+  const isIcon = iconName;
+  if (isIcon) {
+    return <Icon component={(icons as any)[iconName]} style={{ color: themeColor }}></Icon>;
+  }
+  return <PlusOutlined />;
+}
+
 export default SliderBar;

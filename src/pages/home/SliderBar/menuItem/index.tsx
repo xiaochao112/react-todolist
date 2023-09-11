@@ -4,7 +4,7 @@ import { Popconfirm } from 'antd';
 import { DeleteOutlined, EditOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 interface TPorps extends HTMLAttributes<HTMLDivElement> {
   text: string;
-  icon: ReactNode;
+  icon?: ReactNode;
   checked?: boolean;
   isShowDel?: boolean;
   isShowEdit?: boolean;
