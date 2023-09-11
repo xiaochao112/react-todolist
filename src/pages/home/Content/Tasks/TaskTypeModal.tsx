@@ -1,18 +1,38 @@
 import { Form, Input, Select, Modal, Button, Space } from 'antd';
 import Icon, * as icons from '@ant-design/icons';
+import { TaskType } from '@api/task/taskType/type';
+import { useEffect } from 'react';
 
 type TPorps = {
   title: 'add' | 'edit';
   show: boolean;
   handleCancel: () => void;
-  onFinish: (values: any) => void;
+  typeInfo?: TaskType;
 };
 const iconlist = Object.keys(icons).filter((item) => {
   // @ts-ignore
   return typeof icons[item] === 'object';
 });
-const TaskTypeModal = ({ title, show, handleCancel, onFinish }: TPorps) => {
+const TaskTypeModal = ({ title, show, handleCancel, typeInfo }: TPorps) => {
   const [form] = Form.useForm();
+  const onFinish = () => {};
+
+  useEffect(() => {
+    if (!show) {
+      form.resetFields();
+    }
+  }, [show, form]);
+
+  useEffect(() => {
+    if (typeInfo?.typeId) {
+      form.setFieldsValue({
+        typeName: typeInfo.typeName,
+        desc: typeInfo.desc,
+        themeColor: typeInfo.themeColor,
+        icon: typeInfo.icon,
+      });
+    }
+  }, [typeInfo, form]);
 
   return (
     <>

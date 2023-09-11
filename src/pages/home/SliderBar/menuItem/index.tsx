@@ -8,9 +8,11 @@ interface TPorps extends HTMLAttributes<HTMLDivElement> {
   checked?: boolean;
   isShowDel?: boolean;
   isShowEdit?: boolean;
+  onDel?: () => void;
+  onEdit?: () => void;
 }
 
-function MenuItem({ text, icon, checked, isShowDel, isShowEdit, ...args }: TPorps) {
+function MenuItem({ text, icon, checked, isShowDel, isShowEdit, onDel, onEdit, ...args }: TPorps) {
   return (
     <>
       <div
@@ -20,11 +22,17 @@ function MenuItem({ text, icon, checked, isShowDel, isShowEdit, ...args }: TPorp
         {icon}
         <span className=' ml-2'>{text}</span>
         <div className='float-right'>
-          {isShowEdit && <EditOutlined className='sliderBar_menuItem-icon cursor-pointer mr-3' />}
+          {isShowEdit && (
+            <EditOutlined
+              onClick={onEdit}
+              className='sliderBar_menuItem-icon cursor-pointer mr-3'
+            />
+          )}
           {isShowDel && (
             <Popconfirm
               okText='确定'
               cancelText='取消'
+              onConfirm={onDel}
               title='确定删除该任务吗？'
               icon={<QuestionCircleOutlined style={{ color: 'red' }} />}>
               <DeleteOutlined className='sliderBar_menuItem-icon cursor-pointer' />

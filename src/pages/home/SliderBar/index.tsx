@@ -32,7 +32,8 @@ async function getTaskType({ taskTypeList, ignore }: TTaskType) {
 function SliderBar({ onSearchChange }: TPorps) {
   const [timeIndex, setTimeIndex] = useState<STime>(timeListConst[0].type); // 当前选中的日期区间
   const [taskStatusIndex, setTaskStatusIndex] = useState<number>(0); // 当前选择的状态
-  const [showTaskTypeModal, setShowTaskTypeModal] = useState(true); // 是否显示类型对话框
+  const [taskTypeIndex, setTaskTypeIndex] = useState(0); // 当前选择的leix
+  const [showTaskTypeModal, setShowTaskTypeModal] = useState(false); // 是否显示类型对话框
   const dateRangeValue = useRef<[moment.Moment, moment.Moment]>([
     moment(moment(new Date()).subtract(1, 'month').format('YYYY/MM/DD')),
     moment(new Date(), 'YYYY/MM/DD'),
@@ -41,7 +42,7 @@ function SliderBar({ onSearchChange }: TPorps) {
   const taskTypeList = useRef<TaskType[]>([]); // 任务类型列表
 
   const titleModal = useRef<'add' | 'edit'>('add'); // 类型对话框
-
+  const taskTypeInfo = useRef<TaskType>();
   // 监听查询变化
   const handleSearch = () => {
     const [startTime, endTime] = getTimeByIndex(timeIndex);
@@ -128,6 +129,7 @@ function SliderBar({ onSearchChange }: TPorps) {
             <h3 className='text-desc font-bold'>任务类型</h3>
             <div
               onClick={() => {
+                taskTypeInfo.current = void 0;
                 setShowTaskTypeModal(true);
               }}>
               <MyIcon className=' mr-2' icon={<PlusOutlined className=' flex text-xl' />} />
@@ -140,9 +142,17 @@ function SliderBar({ onSearchChange }: TPorps) {
                 text={item.typeName}
                 isShowDel
                 isShowEdit
+                checked={index === taskTypeIndex}
                 icon={renderIcon(item.icon, item.themeColor)}
                 onClick={() => {
                   setTaskStatusIndex(index);
+                  setTaskTypeIndex(index);
+                }}
+                onDel={() => {}}
+                onEdit={() => {
+                  titleModal.current = 'edit';
+                  taskTypeInfo.current = { ...item };
+                  setShowTaskTypeModal(true);
                 }}
               />
             ))}
@@ -152,11 +162,9 @@ function SliderBar({ onSearchChange }: TPorps) {
       <TaskTypeModal
         title={titleModal.current}
         show={showTaskTypeModal}
+        typeInfo={taskTypeInfo.current}
         handleCancel={() => {
           setShowTaskTypeModal(false);
-        }}
-        onFinish={(values: any) => {
-          console.log(values, 'form');
         }}
       />
     </>
