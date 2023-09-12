@@ -1,21 +1,42 @@
-import { Form, Input, Select, Modal, Button, Space } from 'antd';
+import { Form, Input, Select, Modal, Button, Space, message } from 'antd';
 import Icon, * as icons from '@ant-design/icons';
 import { TaskType } from '@api/task/taskType/type';
 import { useEffect } from 'react';
+import { addTaskType, updateTaskType } from '@api/task/taskType';
 
 type TPorps = {
   title: 'add' | 'edit';
   show: boolean;
   handleCancel: () => void;
   typeInfo?: TaskType;
+  getTaskTypeList: () => void;
 };
 const iconlist = Object.keys(icons).filter((item) => {
   // @ts-ignore
   return typeof icons[item] === 'object';
 });
-const TaskTypeModal = ({ title, show, handleCancel, typeInfo }: TPorps) => {
+const TaskTypeModal = ({ title, show, handleCancel, typeInfo, getTaskTypeList }: TPorps) => {
   const [form] = Form.useForm();
-  const onFinish = () => {};
+
+  const onFinish = async () => {
+    const data = form.getFieldsValue();
+    if (title === 'add') {
+      const res = await addTaskType(data);
+      if (res.code === 200) {
+        message.success('添加成功！');
+        getTaskTypeList();
+        handleCancel();
+      }
+    } else {
+      const res = await updateTaskType({ ...data, typeId: typeInfo?.typeId });
+      if (res.code === 200) {
+        message.success('更新成功！');
+        getTaskTypeList();
+        handleCancel();
+      }
+    }
+    // await addTaskType()
+  };
 
   useEffect(() => {
     if (!show) {

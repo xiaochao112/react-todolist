@@ -6,9 +6,9 @@ import { useEffect, useRef, useState } from 'react';
 import { STime } from './type';
 import { TSaerchParams } from '..';
 import { getCurrentMonthsTime, getTimeByIndex, getTimeStringByDate } from './core';
-import { DatePicker } from 'antd';
+import { DatePicker, message } from 'antd';
 import moment from 'moment';
-import { getTaskTypeList } from '@api/task/taskType';
+import { delTaskType, getTaskTypeList } from '@api/task/taskType';
 import { TaskType } from '@api/task/taskType/type';
 import TaskTypeModal from '../Content/Tasks/TaskTypeModal';
 import * as icons from '@ant-design/icons';
@@ -16,18 +16,7 @@ import * as icons from '@ant-design/icons';
 type TPorps = {
   onSearchChange: (data: TSaerchParams) => void; // search数据监听
 };
-type TTaskType = {
-  taskTypeList: React.MutableRefObject<TaskType[]>;
-  ignore: boolean;
-};
 const { RangePicker } = DatePicker;
-
-async function getTaskType({ taskTypeList, ignore }: TTaskType) {
-  const res = await getTaskTypeList();
-  if (!ignore) {
-    taskTypeList.current = res.result!;
-  }
-}
 
 function SliderBar({ onSearchChange }: TPorps) {
   const [timeIndex, setTimeIndex] = useState<STime>(timeListConst[0].type); // 当前选中的日期区间
@@ -39,11 +28,11 @@ function SliderBar({ onSearchChange }: TPorps) {
     moment(new Date(), 'YYYY/MM/DD'),
   ]); // 自定义时间
   const timeStr = useRef<number[]>([0, 0]); // 自定义时间戳
-  const taskTypeList = useRef<TaskType[]>([]); // 任务类型列表
+  const [taskTypeList, setTaskTypeList] = useState<TaskType[]>([]); // 任务类型列表
 
   const titleModal = useRef<'add' | 'edit'>('add'); // 类型对话框
   const taskTypeInfo = useRef<TaskType>();
-  // 监听查询变化
+  // 搜索数据，监听数据变化
   const handleSearch = () => {
     const [startTime, endTime] = getTimeByIndex(timeIndex);
     const data = { startTime, endTime, timeIndex, status: taskStatusIndex };
@@ -56,10 +45,17 @@ function SliderBar({ onSearchChange }: TPorps) {
     }
     onSearchChange(data);
   };
-
+  async function getTaskType() {
+    const res = await getTaskTypeList();
+    setTaskTypeList(res.result!);
+  }
   useEffect(() => {
     let ignore = false;
-    getTaskType({ taskTypeList, ignore });
+    getTaskTypeList().then((res) => {
+      if (!ignore) {
+        setTaskTypeList(res.result!);
+      }
+    });
     return () => {
       ignore = true;
     };
@@ -136,7 +132,7 @@ function SliderBar({ onSearchChange }: TPorps) {
             </div>
           </div>
           <div>
-            {taskTypeList.current?.map((item, index) => (
+            {taskTypeList?.map((item, index) => (
               <MenuItem
                 key={index}
                 text={item.typeName}
@@ -145,10 +141,16 @@ function SliderBar({ onSearchChange }: TPorps) {
                 checked={index === taskTypeIndex}
                 icon={renderIcon(item.icon, item.themeColor)}
                 onClick={() => {
-                  setTaskStatusIndex(index);
                   setTaskTypeIndex(index);
                 }}
-                onDel={() => {}}
+                onDel={() => {
+                  delTaskType({ typeId: item.typeId }).then((res) => {
+                    if (res.code === 200) {
+                      message.success('删除成功！');
+                      getTaskType();
+                    }
+                  });
+                }}
                 onEdit={() => {
                   titleModal.current = 'edit';
                   taskTypeInfo.current = { ...item };
@@ -165,6 +167,9 @@ function SliderBar({ onSearchChange }: TPorps) {
         typeInfo={taskTypeInfo.current}
         handleCancel={() => {
           setShowTaskTypeModal(false);
+        }}
+        getTaskTypeList={() => {
+          getTaskType();
         }}
       />
     </>

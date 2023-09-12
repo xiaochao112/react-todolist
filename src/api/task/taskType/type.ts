@@ -9,9 +9,18 @@ export type TaskType = {
   icon?: string;
 };
 
+export type TAddTaskTypeParams = {
+  typeName: string;
+  desc: string;
+  themeColor?: string;
+  icon?: string;
+};
+
 export type TDelTaskTypeParams = {
   typeId: number;
 };
+
+export type TUpdateTaskTypeParams = TAddTaskTypeParams & TDelTaskTypeParams;
 
 export type TResTaskTypeList = {
   code: number;
