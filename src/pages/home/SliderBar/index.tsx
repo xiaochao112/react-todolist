@@ -21,14 +21,14 @@ const { RangePicker } = DatePicker;
 function SliderBar({ onSearchChange }: TPorps) {
   const [timeIndex, setTimeIndex] = useState<STime>(timeListConst[0].type); // 当前选中的日期区间
   const [taskStatusIndex, setTaskStatusIndex] = useState<number>(0); // 当前选择的状态
-  const [taskTypeIndex, setTaskTypeIndex] = useState(0); // 当前选择的leix
+  const [taskTypeList, setTaskTypeList] = useState<TaskType[]>([]); // 任务类型列表
+  const [taskTypeIndex, setTaskTypeIndex] = useState(0); // 当前选择的任务类型
   const [showTaskTypeModal, setShowTaskTypeModal] = useState(false); // 是否显示类型对话框
   const dateRangeValue = useRef<[moment.Moment, moment.Moment]>([
     moment(moment(new Date()).subtract(1, 'month').format('YYYY/MM/DD')),
     moment(new Date(), 'YYYY/MM/DD'),
   ]); // 自定义时间
   const timeStr = useRef<number[]>([0, 0]); // 自定义时间戳
-  const [taskTypeList, setTaskTypeList] = useState<TaskType[]>([]); // 任务类型列表
 
   const titleModal = useRef<'add' | 'edit'>('add'); // 类型对话框
   const taskTypeInfo = useRef<TaskType>();
