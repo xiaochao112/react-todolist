@@ -25,6 +25,7 @@ const TaskTypeModal = ({ title, show, handleCancel, typeInfo, getTaskTypeList }:
       if (res.code === 200) {
         message.success('添加成功！');
         getTaskTypeList();
+        form.resetFields();
         handleCancel();
       }
     } else {
@@ -32,17 +33,18 @@ const TaskTypeModal = ({ title, show, handleCancel, typeInfo, getTaskTypeList }:
       if (res.code === 200) {
         message.success('更新成功！');
         getTaskTypeList();
+        form.resetFields();
         handleCancel();
       }
     }
     // await addTaskType()
   };
 
-  useEffect(() => {
-    if (!show) {
-      form.resetFields();
-    }
-  }, [show, form]);
+  // useEffect(() => {
+  //   if (!show) {
+  //     form.resetFields();
+  //   }
+  // }, [show, form]);
 
   useEffect(() => {
     if (typeInfo?.typeId) {
@@ -60,7 +62,10 @@ const TaskTypeModal = ({ title, show, handleCancel, typeInfo, getTaskTypeList }:
       <Modal
         title={title === 'add' ? '添加类型' : '编辑类型'}
         open={show}
-        onCancel={handleCancel}
+        onCancel={() => {
+          handleCancel();
+          form.resetFields();
+        }}
         footer={
           <div className='flex justify-end w-full'>
             <Button type='primary' onClick={form.submit}>

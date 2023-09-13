@@ -35,7 +35,12 @@ function SliderBar({ onSearchChange }: TPorps) {
   // 搜索数据，监听数据变化
   const handleSearch = () => {
     const [startTime, endTime] = getTimeByIndex(timeIndex);
-    const data = { startTime, endTime, timeIndex, status: taskStatusIndex };
+    const data = {
+      startTime,
+      endTime,
+      status: taskStatusIndex,
+      typeId: taskTypeIndex,
+    };
     if (timeIndex === STime.自定义 && !timeStr.current[0]) {
       timeStr.current = getCurrentMonthsTime();
     }
@@ -64,7 +69,7 @@ function SliderBar({ onSearchChange }: TPorps) {
   useEffect(() => {
     handleSearch();
     return () => {};
-  }, [timeIndex, taskStatusIndex]);
+  }, [timeIndex, taskStatusIndex, taskTypeIndex]);
 
   return (
     <>
@@ -138,10 +143,10 @@ function SliderBar({ onSearchChange }: TPorps) {
                 text={item.typeName}
                 isShowDel
                 isShowEdit
-                checked={index === taskTypeIndex}
+                checked={item.typeId === taskTypeIndex}
                 icon={renderIcon(item.icon, item.themeColor)}
                 onClick={() => {
-                  setTaskTypeIndex(index);
+                  setTaskTypeIndex(item.typeId);
                 }}
                 onDel={() => {
                   delTaskType({ typeId: item.typeId }).then((res) => {

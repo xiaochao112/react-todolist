@@ -8,11 +8,10 @@ import { TTaskItem } from '@api/task/type';
 import { Spin } from 'antd';
 
 export type TSaerchParams = {
-  // taskType: number;
+  typeId: number;
   status: number;
   startTime: number;
   endTime: number;
-  timeIndex: number;
 };
 
 function MyHome() {
