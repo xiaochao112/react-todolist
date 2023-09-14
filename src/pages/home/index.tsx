@@ -6,6 +6,7 @@ import { getTaskList } from '@api/task';
 import { useStateUserInfo } from '@store/hook';
 import { TTaskItem } from '@api/task/type';
 import { Spin } from 'antd';
+import TaskModal from './Content/Tasks/TaskModal';
 
 export type TSaerchParams = {
   typeId: number;
@@ -13,8 +14,13 @@ export type TSaerchParams = {
   startTime: number;
   endTime: number;
 };
+type TPorps = {
+  showTaskModal: boolean;
+  cancelTaskModal: () => void;
+  onShowTaskModal: () => void;
+};
 
-function MyHome() {
+function MyHome({ showTaskModal, cancelTaskModal, onShowTaskModal }: TPorps) {
   const userInfo = useStateUserInfo();
   const [taskList, setTaskList] = useState<TTaskItem[]>([]);
   const [page, setPage] = useState({ page: 1, pageSize: 10 });
@@ -67,6 +73,16 @@ function MyHome() {
           </Spin>
         </div>
       </div>
+      <TaskModal
+        type='add'
+        show={showTaskModal}
+        handleCancel={() => {
+          cancelTaskModal();
+        }}
+        handleOk={() => {
+          getList();
+        }}
+      />
     </>
   );
 }

@@ -11,6 +11,12 @@ import type { MenuProps } from 'antd';
 import { useEffect, useState } from 'react';
 import LoginAndRegister from '@components/common/LoginAndRegister';
 import { useStateUserInfo, useDispatchUser } from '@store/hook';
+
+type TPorps = {
+  cancelTaskModal: () => void;
+  onShowTaskModal: () => void;
+};
+
 const { confirm } = Modal;
 const showConfirm = (
   stateClearUser: () => {
@@ -32,7 +38,7 @@ const showConfirm = (
     },
   });
 };
-function NavBer() {
+function NavBer({ cancelTaskModal, onShowTaskModal }: TPorps) {
   const { stateClearUser } = useDispatchUser();
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const userInfo = useStateUserInfo();
@@ -95,11 +101,18 @@ function NavBer() {
               <Input placeholder='搜索' style={{ width: 200 }} prefix={<SearchOutlined />} />
             </div>
           </div>
-          <div className='flex items-center'>
+          <div
+            className='flex items-center'
+            onClick={() => {
+              onShowTaskModal();
+            }}>
             <MyIcon className=' mr-2' icon={<PlusOutlined className=' flex text-xl' />} />
             <div>
               <Dropdown menu={{ items: menulist() }}>
-                <Avatar style={{ backgroundColor: '#87d068' }} icon={<UserOutlined />} />
+                <Avatar
+                  style={{ backgroundColor: '#87d068', cursor: 'pointer' }}
+                  icon={<UserOutlined />}
+                />
               </Dropdown>
             </div>
           </div>

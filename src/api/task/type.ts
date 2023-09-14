@@ -35,6 +35,20 @@ export type TResTaskList = {
   message: number;
   result?: TUserTaskList;
 };
+
+export type TAddTaskParams = {
+  taskName: string;
+  taskContent: string;
+  typeId: number;
+  expectTime?: string;
+};
 export type TDelTaskParams = {
   taskId: number;
+};
+export type TUpdateTaskParams = TAddTaskParams & TDelTaskParams;
+
+export type TResUpdateOrAddTask = {
+  code: number;
+  message: string;
+  result?: TTaskItem;
 };

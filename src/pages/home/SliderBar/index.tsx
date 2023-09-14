@@ -12,6 +12,7 @@ import { delTaskType, getTaskTypeList } from '@api/task/taskType';
 import { TaskType } from '@api/task/taskType/type';
 import TaskTypeModal from '../Content/Tasks/TaskTypeModal';
 import * as icons from '@ant-design/icons';
+import { useDispatchTaskType, useStateTaskTypeList } from '@store/hook/task';
 
 type TPorps = {
   onSearchChange: (data: TSaerchParams) => void; // search数据监听
@@ -19,9 +20,10 @@ type TPorps = {
 const { RangePicker } = DatePicker;
 
 function SliderBar({ onSearchChange }: TPorps) {
+  const { stateSetTaskType } = useDispatchTaskType();
+  const taskTypeList = useStateTaskTypeList();
   const [timeIndex, setTimeIndex] = useState<STime>(timeListConst[0].type); // 当前选中的日期区间
   const [taskStatusIndex, setTaskStatusIndex] = useState<number>(0); // 当前选择的状态
-  const [taskTypeList, setTaskTypeList] = useState<TaskType[]>([]); // 任务类型列表
   const [taskTypeIndex, setTaskTypeIndex] = useState(0); // 当前选择的任务类型
   const [showTaskTypeModal, setShowTaskTypeModal] = useState(false); // 是否显示类型对话框
   const dateRangeValue = useRef<[moment.Moment, moment.Moment]>([
@@ -52,13 +54,13 @@ function SliderBar({ onSearchChange }: TPorps) {
   };
   async function getTaskType() {
     const res = await getTaskTypeList();
-    setTaskTypeList(res.result!);
+    stateSetTaskType(res.result!);
   }
   useEffect(() => {
     let ignore = false;
     getTaskTypeList().then((res) => {
       if (!ignore) {
-        setTaskTypeList(res.result!);
+        stateSetTaskType(res.result!);
       }
     });
     return () => {
