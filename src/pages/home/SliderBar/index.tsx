@@ -24,7 +24,7 @@ function SliderBar({ onSearchChange }: TPorps) {
   const taskTypeList = useStateTaskTypeList();
   const [timeIndex, setTimeIndex] = useState<STime>(timeListConst[0].type); // 当前选中的日期区间
   const [taskStatusIndex, setTaskStatusIndex] = useState<number>(0); // 当前选择的状态
-  const [taskTypeIndex, setTaskTypeIndex] = useState(0); // 当前选择的任务类型
+  const [taskTypeIndex, setTaskTypeIndex] = useState(1); // 当前选择的任务类型
   const [showTaskTypeModal, setShowTaskTypeModal] = useState(false); // 是否显示类型对话框
   const dateRangeValue = useRef<[moment.Moment, moment.Moment]>([
     moment(moment(new Date()).subtract(1, 'month').format('YYYY/MM/DD')),
@@ -42,6 +42,7 @@ function SliderBar({ onSearchChange }: TPorps) {
       endTime,
       status: taskStatusIndex,
       typeId: taskTypeIndex,
+      timeIndex,
     };
     if (timeIndex === STime.自定义 && !timeStr.current[0]) {
       timeStr.current = getCurrentMonthsTime();

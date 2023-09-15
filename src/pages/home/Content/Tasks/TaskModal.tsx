@@ -10,23 +10,28 @@ import {
   DatePickerProps,
 } from 'antd';
 import { useEffect } from 'react';
-import { addTaskType, updateTaskType } from '@api/task/taskType';
 import { useStateTaskTypeList } from '@store/hook/task';
+import { addTaskItem, updateTaskItem } from '@api/task';
+import { TTaskItem } from '@api/task/type';
+import moment from 'moment';
 
 type TPorps = {
   type: 'add' | 'edit';
   show: boolean;
   handleCancel: () => void;
   handleOk: () => void;
+  taskIInfo: TTaskItem;
 };
-const TaskModal = ({ type, show, handleCancel, handleOk }: TPorps) => {
+const TaskModal = ({ type, show, handleCancel, handleOk, taskIInfo }: TPorps) => {
   const [form] = Form.useForm();
   const taskTypeList = useStateTaskTypeList();
 
   const onFinish = async () => {
     const data = form.getFieldsValue();
+    console.log(data, 'data');
     if (type === 'add') {
-      const res = await addTaskType(data);
+      data.expectTime = (+data.expectTime).toString();
+      const res = await addTaskItem(data);
       if (res.code === 200) {
         message.success('添加成功！');
         form.resetFields();
@@ -34,7 +39,7 @@ const TaskModal = ({ type, show, handleCancel, handleOk }: TPorps) => {
         handleOk(); // 触发刷新任务列表
       }
     } else {
-      const res = await updateTaskType({ ...data, typeId: 1 });
+      const res = await updateTaskItem({ ...data, taskId: taskIInfo.taskId });
       if (res.code === 200) {
         message.success('更新成功！');
         form.resetFields();
@@ -42,14 +47,18 @@ const TaskModal = ({ type, show, handleCancel, handleOk }: TPorps) => {
         handleOk();
       }
     }
-    // await addTaskType()
   };
 
-  // useEffect(() => {
-  //   if (!show) {
-  //     form.resetFields();
-  //   }
-  // }, [show, form]);
+  useEffect(() => {
+    if (taskIInfo?.taskId) {
+      form.setFieldsValue({
+        taskName: taskIInfo.taskName,
+        taskContent: taskIInfo.taskContent,
+        expectTime: moment(+(taskIInfo.expectTime || new Date())),
+        typeId: taskIInfo.typeId,
+      });
+    }
+  }, [taskIInfo, form]);
   const onChange: DatePickerProps['onChange'] = (date, dateString) => {
     console.log(date, dateString);
   };

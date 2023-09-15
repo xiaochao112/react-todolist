@@ -4,7 +4,9 @@ import NavBer from '@components/NavBer/NavBer';
 import { useState } from 'react';
 
 function MyRouter() {
-  const [showTaskModal, setShowTaskModal] = useState(true);
+  const [showTaskModal, setShowTaskModal] = useState(false);
+  const [type, setType] = useState<'add' | 'edit'>('add');
+
   return (
     <>
       <Router>
@@ -14,6 +16,7 @@ function MyRouter() {
           }}
           onShowTaskModal={() => {
             setShowTaskModal(true);
+            setType('add');
           }}
         />
         <Routes>
@@ -25,6 +28,8 @@ function MyRouter() {
                 cancelTaskModal={() => {
                   setShowTaskModal(false);
                 }}
+                type={type}
+                setType={setType}
                 onShowTaskModal={() => {
                   setShowTaskModal(true);
                 }}
