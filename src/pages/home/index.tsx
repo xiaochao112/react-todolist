@@ -87,11 +87,11 @@ function MyHome({ showTaskModal, cancelTaskModal, onShowTaskModal, type, setType
               getList={getList}
               searchTime={searchParams!}
               onEditTaskModal={(type, task) => {
-                onShowTaskModal();
                 setType(type!);
                 // @ts-ignore
-                taskItemInfo.current = task && typeof task === 'object' ? task : null;
+                taskItemInfo.current = task && typeof task === 'object' ? { ...task } : {};
                 currentChooseTaskType.current = searchParams?.typeId;
+                onShowTaskModal();
               }}
             />
           </Spin>
@@ -101,7 +101,7 @@ function MyHome({ showTaskModal, cancelTaskModal, onShowTaskModal, type, setType
         type={type}
         show={showTaskModal}
         currentTaskType={currentChooseTaskType.current}
-        taskIInfo={taskItemInfo.current!}
+        taskIInfo={taskItemInfo.current}
         handleCancel={() => {
           cancelTaskModal();
         }}

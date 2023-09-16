@@ -20,7 +20,7 @@ type TPorps = {
   show: boolean;
   handleCancel: () => void;
   handleOk: () => void;
-  taskIInfo: TTaskItem;
+  taskIInfo?: TTaskItem;
   currentTaskType?: number;
 };
 const TaskModal = ({ type, show, handleCancel, handleOk, taskIInfo, currentTaskType }: TPorps) => {
@@ -63,7 +63,8 @@ const TaskModal = ({ type, show, handleCancel, handleOk, taskIInfo, currentTaskT
         typeId: currentTaskType,
       });
     }
-  }, [taskIInfo, form, currentTaskType]);
+    console.log(taskIInfo);
+  }, [taskIInfo, currentTaskType]);
   const onChange: DatePickerProps['onChange'] = (date, dateString) => {
     console.log(date, dateString);
   };

@@ -10,15 +10,15 @@ type TPorps = {
   delItem: () => void;
   onShowTaskModal: () => void;
 };
-const onChange = (e: CheckboxChangeEvent) => {
-  console.log(`checked = ${e.target.checked}`);
-};
 function TaskItem({ item, delItem, onShowTaskModal }: TPorps) {
   return (
     <>
       <div className=' w-full task-item relative p-2 rounded-md'>
         <div>
-          <Checkbox onChange={onChange}></Checkbox>
+          <Checkbox
+            onChange={(e: CheckboxChangeEvent) => {
+              console.log(`checked = ${e.target.checked}`);
+            }}></Checkbox>
           <a className=' text-sm ml-2 cursor-pointer' onClick={onShowTaskModal}>
             {item.taskName}
           </a>
