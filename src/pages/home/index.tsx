@@ -31,6 +31,7 @@ function MyHome({ showTaskModal, cancelTaskModal, onShowTaskModal, type, setType
   const [isFetching, setIsFetching] = useState(false);
 
   const taskItemInfo = useRef<TTaskItem>();
+  const currentChooseTaskType = useRef<number>();
 
   // 初始化请求
   useEffect(() => {
@@ -60,6 +61,12 @@ function MyHome({ showTaskModal, cancelTaskModal, onShowTaskModal, type, setType
     };
   }, [page, userInfo, searchParams]);
 
+  // 切换任务类型
+  useEffect(() => {
+    if (searchParams?.typeId) {
+      currentChooseTaskType.current = searchParams.typeId;
+    }
+  }, [searchParams]);
   async function getList() {
     const data = { ...page, ...searchParams };
     const res = await getTaskList(data);
@@ -78,14 +85,14 @@ function MyHome({ showTaskModal, cancelTaskModal, onShowTaskModal, type, setType
             <Content
               taskList={taskList}
               getList={getList}
-              onShowTaskModal={() => {
-                onShowTaskModal();
-              }}
-              onTaskItem={(taskItem: TTaskItem) => {
-                taskItemInfo.current = taskItem;
-              }}
-              onSetType={setType}
               searchTime={searchParams!}
+              onEditTaskModal={(type, task) => {
+                onShowTaskModal();
+                setType(type!);
+                // @ts-ignore
+                taskItemInfo.current = task && typeof task === 'object' ? task : null;
+                currentChooseTaskType.current = searchParams?.typeId;
+              }}
             />
           </Spin>
         </div>
@@ -93,6 +100,7 @@ function MyHome({ showTaskModal, cancelTaskModal, onShowTaskModal, type, setType
       <TaskModal
         type={type}
         show={showTaskModal}
+        currentTaskType={currentChooseTaskType.current}
         taskIInfo={taskItemInfo.current!}
         handleCancel={() => {
           cancelTaskModal();

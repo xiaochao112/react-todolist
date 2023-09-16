@@ -19,11 +19,7 @@ function TaskItem({ item, delItem, onShowTaskModal }: TPorps) {
       <div className=' w-full task-item relative p-2 rounded-md'>
         <div>
           <Checkbox onChange={onChange}></Checkbox>
-          <a
-            className=' text-sm ml-2 cursor-pointer'
-            onClick={() => {
-              onShowTaskModal();
-            }}>
+          <a className=' text-sm ml-2 cursor-pointer' onClick={onShowTaskModal}>
             {item.taskName}
           </a>
         </div>

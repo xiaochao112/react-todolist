@@ -21,8 +21,9 @@ type TPorps = {
   handleCancel: () => void;
   handleOk: () => void;
   taskIInfo: TTaskItem;
+  currentTaskType?: number;
 };
-const TaskModal = ({ type, show, handleCancel, handleOk, taskIInfo }: TPorps) => {
+const TaskModal = ({ type, show, handleCancel, handleOk, taskIInfo, currentTaskType }: TPorps) => {
   const [form] = Form.useForm();
   const taskTypeList = useStateTaskTypeList();
 
@@ -57,8 +58,12 @@ const TaskModal = ({ type, show, handleCancel, handleOk, taskIInfo }: TPorps) =>
         expectTime: moment(+(taskIInfo.expectTime || new Date())),
         typeId: taskIInfo.typeId,
       });
+    } else {
+      form.setFieldsValue({
+        typeId: currentTaskType,
+      });
     }
-  }, [taskIInfo, form]);
+  }, [taskIInfo, form, currentTaskType]);
   const onChange: DatePickerProps['onChange'] = (date, dateString) => {
     console.log(date, dateString);
   };

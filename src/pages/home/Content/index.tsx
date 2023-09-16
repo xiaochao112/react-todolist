@@ -11,19 +11,10 @@ type TProps = {
   taskList: TTaskItem[];
   getList: () => void;
   searchTime: TSaerchParams;
-  onShowTaskModal: () => void;
-  onTaskItem: (taskItem: TTaskItem) => void;
-  onSetType: (type: 'add' | 'edit') => void;
+  onEditTaskModal: (type?: 'add' | 'edit', task?: TTaskItem) => void;
 };
 
-function Content({
-  taskList,
-  getList,
-  searchTime,
-  onShowTaskModal,
-  onTaskItem,
-  onSetType,
-}: TProps) {
+function Content({ taskList, getList, searchTime, onEditTaskModal }: TProps) {
   return (
     <>
       <div className=' h-full pt-5' style={{ width: 800 }}>
@@ -40,9 +31,7 @@ function Content({
             key={index}
             item={item}
             onShowTaskModal={() => {
-              onShowTaskModal();
-              onTaskItem(item);
-              onSetType('edit');
+              onEditTaskModal('edit', item);
             }}
             delItem={async () => {
               const res = await delTaskItem({ taskId: item.taskId });
@@ -66,8 +55,7 @@ function Content({
             type='link'
             className='mt-5'
             onClick={() => {
-              onShowTaskModal();
-              onSetType('add');
+              onEditTaskModal('add');
             }}>
             添加任务
           </Button>
