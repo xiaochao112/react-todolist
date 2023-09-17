@@ -101,12 +101,14 @@ function NavBer({ cancelTaskModal, onShowTaskModal }: TPorps) {
               <Input placeholder='搜索' style={{ width: 200 }} prefix={<SearchOutlined />} />
             </div>
           </div>
-          <div
-            className='flex items-center'
-            onClick={() => {
-              onShowTaskModal();
-            }}>
-            <MyIcon className=' mr-2' icon={<PlusOutlined className=' flex text-xl' />} />
+          <div className='flex items-center'>
+            <MyIcon
+              className=' mr-2'
+              icon={<PlusOutlined className=' flex text-xl' />}
+              onClick={() => {
+                onShowTaskModal();
+              }}
+            />
             <div>
               <Dropdown menu={{ items: menulist() }}>
                 <Avatar
