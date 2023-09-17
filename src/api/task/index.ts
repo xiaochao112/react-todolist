@@ -6,6 +6,7 @@ import {
   TResTaskList,
   TResUpdateOrAddTask,
   TUpdateTaskParams,
+  TUpdateTaskStatusParams,
 } from './type';
 import { TResponseMsg } from '@api/type';
 
@@ -20,6 +21,10 @@ export const addTaskItem = (data: TAddTaskParams) =>
 // 编辑任务
 export const updateTaskItem = (data: TUpdateTaskParams) =>
   post<TResUpdateOrAddTask, TUpdateTaskParams>('task/update', data);
+
+// 更新状态
+export const updateTaskStatus = (data: TUpdateTaskStatusParams) =>
+  post<TResUpdateOrAddTask, TUpdateTaskStatusParams>('task/updateStatus', data);
 
 // 删除任务
 export const delTaskItem = (data: TDelTaskParams) =>

@@ -77,7 +77,11 @@ function MyHome({
   }, [searchParams]);
   async function getList() {
     const data = { ...page, ...searchParams };
+    setIsFetching(true);
     const res = await getTaskList(data);
+    setTimeout(() => {
+      setIsFetching(false);
+    }, 200);
     setTaskList(res.result!.result);
   }
   return (

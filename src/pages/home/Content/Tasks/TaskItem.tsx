@@ -9,28 +9,32 @@ type TPorps = {
   item: TTaskItem;
   delItem: () => void;
   onShowTaskModal: () => void;
+  onToggleState: (state: boolean) => void;
 };
-function TaskItem({ item, delItem, onShowTaskModal }: TPorps) {
+function TaskItem({ item, delItem, onShowTaskModal, onToggleState }: TPorps) {
+  const { taskName, status, createTime, taskContent } = item;
   return (
     <>
       <div className=' w-full task-item relative p-2 rounded-md'>
         <div>
           <Checkbox
+            checked={status === 1}
             onChange={(e: CheckboxChangeEvent) => {
               console.log(`checked = ${e.target.checked}`);
+              onToggleState(e.target.checked);
             }}></Checkbox>
           <a className=' text-sm ml-2 cursor-pointer' onClick={onShowTaskModal}>
-            {item.taskName}
+            {taskName}
           </a>
         </div>
-        <div className=' pl-6 mt-1 text-xs text-desc'>{item.taskContent}</div>
+        <div className=' pl-6 mt-1 text-xs text-desc'>{taskContent}</div>
         <div className='w-full flex justify-between my-1 text-xs text-desc'>
           <div className='pl-6' style={{ color: 'red' }}>
-            状态：{item.status ? '完成' : '未完成'}
+            状态：{status ? '完成' : '未完成'}
           </div>
           <div>
             <CarryOutOutlined className='mr-1' />
-            <span>{dayjs(+item.createTime).format('YYYY-MM-DD - h:mm:ss - a')}</span>
+            <span>{dayjs(+createTime).format('YYYY-MM-DD - h:mm:ss - a')}</span>
           </div>
         </div>
         <Popconfirm

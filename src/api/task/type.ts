@@ -47,6 +47,12 @@ export type TDelTaskParams = {
 };
 export type TUpdateTaskParams = TAddTaskParams & TDelTaskParams;
 
+export type TUpdateTaskStatusParams = {
+  userId?: number;
+  taskId: number;
+  status?: number;
+};
+
 export type TResUpdateOrAddTask = {
   code: number;
   message: string;

@@ -1,11 +1,12 @@
-import { PlusCircleOutlined } from '@ant-design/icons';
+import { BellOutlined, CheckCircleOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import empty from '@assets/img/empty.jpg';
-import { Button, message } from 'antd';
+import { Button, message, notification } from 'antd';
 import TaskItem from './Tasks/TaskItem';
 import { TTaskItem } from '@api/task/type';
-import { delTaskItem } from '@api/task';
+import { delTaskItem, updateTaskStatus } from '@api/task';
 import { TSaerchParams } from '..';
 import { getFullTimeByIndex, getTimeTextByIndex } from '../util';
+import { useStateUserInfo } from '@store/hook';
 
 type TProps = {
   taskList: TTaskItem[];
@@ -15,6 +16,8 @@ type TProps = {
 };
 
 function Content({ taskList, getList, searchTime, onEditTaskModal }: TProps) {
+  const userInfo = useStateUserInfo();
+
   return (
     <>
       <div className=' h-full pt-5' style={{ width: 800 }}>
@@ -32,6 +35,40 @@ function Content({ taskList, getList, searchTime, onEditTaskModal }: TProps) {
             item={item}
             onShowTaskModal={() => {
               onEditTaskModal('edit', item);
+            }}
+            onToggleState={async (state) => {
+              const data = {
+                userId: userInfo.user.id,
+                status: state ? 1 : 0,
+                taskId: item.taskId,
+              };
+              const res = await updateTaskStatus(data);
+              if (res.code === 200) {
+                notification.info({
+                  message: state ? '任务已完成' : '任务未完成',
+                  description: (
+                    <>
+                      <p className='text-base'>{item.taskName}</p>
+                      <p className='text-xs'>{item.taskContent}</p>
+                    </>
+                  ),
+                  icon: state ? (
+                    <CheckCircleOutlined
+                      style={{
+                        color: '#2ecc71',
+                      }}
+                    />
+                  ) : (
+                    <BellOutlined
+                      style={{
+                        color: '#f39c12',
+                      }}
+                    />
+                  ),
+                });
+                getList();
+              }
+              console.log(res);
             }}
             delItem={async () => {
               const res = await delTaskItem({ taskId: item.taskId });
