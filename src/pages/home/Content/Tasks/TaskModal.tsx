@@ -63,8 +63,7 @@ const TaskModal = ({ type, show, handleCancel, handleOk, taskIInfo, currentTaskT
         typeId: currentTaskType,
       });
     }
-    console.log(taskIInfo);
-  }, [taskIInfo, currentTaskType]);
+  }, [taskIInfo, currentTaskType, form]);
   const onChange: DatePickerProps['onChange'] = (date, dateString) => {
     console.log(date, dateString);
   };

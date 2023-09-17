@@ -21,9 +21,17 @@ type TPorps = {
   onShowTaskModal: () => void;
   type: 'add' | 'edit';
   setType: (type: 'add' | 'edit') => void;
+  onLogin: () => void;
 };
 
-function MyHome({ showTaskModal, cancelTaskModal, onShowTaskModal, type, setType }: TPorps) {
+function MyHome({
+  showTaskModal,
+  cancelTaskModal,
+  onShowTaskModal,
+  type,
+  setType,
+  onLogin,
+}: TPorps) {
   const userInfo = useStateUserInfo();
   const [taskList, setTaskList] = useState<TTaskItem[]>([]);
   const [page, setPage] = useState({ page: 1, pageSize: 10 });
@@ -78,6 +86,9 @@ function MyHome({ showTaskModal, cancelTaskModal, onShowTaskModal, type, setType
         <SliderBar
           onSearchChange={(data) => {
             setSearchParams(data);
+          }}
+          goToLigon={() => {
+            onLogin();
           }}
         />
         <div className='content flex w-full justify-center'>

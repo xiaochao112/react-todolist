@@ -13,14 +13,18 @@ import { TaskType } from '@api/task/taskType/type';
 import TaskTypeModal from '../Content/Tasks/TaskTypeModal';
 import * as icons from '@ant-design/icons';
 import { useDispatchTaskType, useStateTaskTypeList } from '@store/hook/task';
+import { useStateUserInfo } from '@store/hook';
 
 type TPorps = {
   onSearchChange: (data: TSaerchParams) => void; // search数据监听
+  goToLigon: () => void;
 };
 const { RangePicker } = DatePicker;
 
-function SliderBar({ onSearchChange }: TPorps) {
-  const { stateSetTaskType } = useDispatchTaskType();
+function SliderBar({ onSearchChange, goToLigon }: TPorps) {
+  const userInfo = useStateUserInfo();
+
+  const { stateSetTaskType, stateClearTaskType } = useDispatchTaskType();
   const taskTypeList = useStateTaskTypeList();
   const [timeIndex, setTimeIndex] = useState<STime>(timeListConst[0].type); // 当前选中的日期区间
   const [taskStatusIndex, setTaskStatusIndex] = useState<number>(0); // 当前选择的状态
@@ -59,15 +63,19 @@ function SliderBar({ onSearchChange }: TPorps) {
   }
   useEffect(() => {
     let ignore = false;
-    getTaskTypeList().then((res) => {
-      if (!ignore) {
-        stateSetTaskType(res.result!);
-      }
-    });
+    if (userInfo.isLogin) {
+      getTaskTypeList().then((res) => {
+        if (!ignore) {
+          stateSetTaskType(res.result!);
+        }
+      });
+    } else {
+      stateClearTaskType();
+    }
     return () => {
       ignore = true;
     };
-  }, []);
+  }, [userInfo]);
 
   useEffect(() => {
     handleSearch();
@@ -87,7 +95,11 @@ function SliderBar({ onSearchChange }: TPorps) {
                 checked={item.type === timeIndex}
                 icon={item.icon}
                 onClick={() => {
-                  setTimeIndex(item.type);
+                  if (userInfo.isLogin) {
+                    setTimeIndex(item.type);
+                  } else {
+                    goToLigon();
+                  }
                 }}
               />
             ))}
@@ -122,7 +134,11 @@ function SliderBar({ onSearchChange }: TPorps) {
                 checked={index === taskStatusIndex}
                 icon={item.icon}
                 onClick={() => {
-                  setTaskStatusIndex(index);
+                  if (userInfo.isLogin) {
+                    setTaskStatusIndex(index);
+                  } else {
+                    goToLigon();
+                  }
                 }}
               />
             ))}
@@ -131,12 +147,19 @@ function SliderBar({ onSearchChange }: TPorps) {
         <div className=' p-3'>
           <div className='flex justify-between'>
             <h3 className='text-desc font-bold'>任务类型</h3>
-            <div
-              onClick={() => {
-                taskTypeInfo.current = void 0;
-                setShowTaskTypeModal(true);
-              }}>
-              <MyIcon className=' mr-2' icon={<PlusOutlined className=' flex text-xl' />} />
+            <div>
+              <MyIcon
+                className=' mr-2'
+                icon={<PlusOutlined className=' flex text-xl' />}
+                onClick={() => {
+                  if (userInfo.isLogin) {
+                    taskTypeInfo.current = void 0;
+                    setShowTaskTypeModal(true);
+                  } else {
+                    goToLigon();
+                  }
+                }}
+              />
             </div>
           </div>
           <div>

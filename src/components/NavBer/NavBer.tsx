@@ -9,12 +9,11 @@ import MyIcon from '@components/common/MyIcon';
 import { Avatar, Input, Dropdown, Modal, message } from 'antd';
 import type { MenuProps } from 'antd';
 import { useEffect, useState } from 'react';
-import LoginAndRegister from '@components/common/LoginAndRegister';
 import { useStateUserInfo, useDispatchUser } from '@store/hook';
 
 type TPorps = {
-  cancelTaskModal: () => void;
   onShowTaskModal: () => void;
+  onLogin: () => void;
 };
 
 const { confirm } = Modal;
@@ -38,9 +37,8 @@ const showConfirm = (
     },
   });
 };
-function NavBer({ cancelTaskModal, onShowTaskModal }: TPorps) {
+function NavBer({ onShowTaskModal, onLogin }: TPorps) {
   const { stateClearUser } = useDispatchUser();
-  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const userInfo = useStateUserInfo();
 
   const loginItem: MenuProps['items'] = [
@@ -67,9 +65,7 @@ function NavBer({ cancelTaskModal, onShowTaskModal }: TPorps) {
           style={{
             width: 200,
           }}
-          onClick={() => {
-            setIsLoginModalOpen(true);
-          }}>
+          onClick={onLogin}>
           立即登录
         </p>
       ),
@@ -88,9 +84,6 @@ function NavBer({ cancelTaskModal, onShowTaskModal }: TPorps) {
     ];
     return items.concat(userInfo.isLogin ? loginItem : logoutItem);
   };
-  useEffect(() => {
-    console.log(userInfo.isLogin, 'userInfo');
-  }, [userInfo]);
   return (
     <>
       <div className=' w-full px-5 flex-shrink-0 primaryNavBarBgColor' style={{ height: 45 }}>
@@ -120,12 +113,6 @@ function NavBer({ cancelTaskModal, onShowTaskModal }: TPorps) {
           </div>
         </div>
       </div>
-      <LoginAndRegister
-        show={isLoginModalOpen}
-        handleCancel={() => {
-          setIsLoginModalOpen(false);
-        }}
-      />
     </>
   );
 }
