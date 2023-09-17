@@ -5,6 +5,7 @@ import {
   TReqTaskList,
   TResTaskList,
   TResUpdateOrAddTask,
+  TSearchTaskParams,
   TUpdateTaskParams,
   TUpdateTaskStatusParams,
 } from './type';
@@ -25,6 +26,10 @@ export const updateTaskItem = (data: TUpdateTaskParams) =>
 // 更新状态
 export const updateTaskStatus = (data: TUpdateTaskStatusParams) =>
   post<TResUpdateOrAddTask, TUpdateTaskStatusParams>('task/updateStatus', data);
+
+// 搜索任务
+export const searchTask = (data: TSearchTaskParams) =>
+  post<TResTaskList, TSearchTaskParams>('task/search', data);
 
 // 删除任务
 export const delTaskItem = (data: TDelTaskParams) =>

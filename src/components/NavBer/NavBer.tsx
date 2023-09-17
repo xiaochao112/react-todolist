@@ -8,8 +8,13 @@ import {
 import MyIcon from '@components/common/MyIcon';
 import { Avatar, Input, Dropdown, Modal, message } from 'antd';
 import type { MenuProps } from 'antd';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useStateUserInfo, useDispatchUser } from '@store/hook';
+import { searchTask } from '@api/task';
+import { debounce } from 'lodash';
+import { useSearch } from '@hooks/useSearch';
+import { TTaskItem } from '@api/task/type';
+import './navber.less';
 
 type TProps = {
   onShowTaskModal: () => void;
@@ -38,6 +43,10 @@ const showConfirm = (
   });
 };
 function NavBer({ onShowTaskModal, onLogin }: TProps) {
+  const { setSearchInfo } = useSearch();
+  const [searchText, setSearchText] = useState('');
+  const [searchList, setSearchList] = useState<TTaskItem[]>([]);
+
   const { stateClearUser } = useDispatchUser();
   const userInfo = useStateUserInfo();
 
@@ -84,6 +93,25 @@ function NavBer({ onShowTaskModal, onLogin }: TProps) {
     ];
     return items.concat(userInfo.isLogin ? loginItem : logoutItem);
   };
+
+  const searchFn = debounce(async (e) => {
+    const searchValue = e.target.value;
+    if (!searchValue) {
+      setSearchList([]);
+      return;
+    }
+    const res = await searchTask({ taskName: searchValue });
+    if (res.code === 200) {
+      setSearchList(res.result!.result);
+    }
+  }, 500);
+
+  // 搜索
+  const onChageSearch = (e) => {
+    setSearchText(e.target.value);
+    searchFn(e);
+  };
+
   return (
     <>
       <div className=' w-full px-5 flex-shrink-0 primaryNavBarBgColor' style={{ height: 45 }}>
@@ -91,7 +119,38 @@ function NavBer({ onShowTaskModal, onLogin }: TProps) {
           <div className='flex items-center'>
             <MyIcon className=' mr-2' icon={<UnorderedListOutlined className=' flex text-xl' />} />
             <div>
-              <Input placeholder='搜索' style={{ width: 200 }} prefix={<SearchOutlined />} />
+              <Input
+                placeholder='搜索'
+                value={searchText}
+                style={{ width: 200 }}
+                prefix={<SearchOutlined />}
+                onChange={onChageSearch}
+              />
+              {!!searchList.length && (
+                <div
+                  className=' absolute left-0 top-10 ml-4 bg-white z-30'
+                  style={{
+                    width: 300,
+                  }}>
+                  {searchList.map((task, index) => (
+                    <div
+                      key={index}
+                      className='snow-search-item-hover text-black flex justify-between py-2 px-2 text-xs cursor-pointer'
+                      onClick={() => {
+                        setSearchInfo(task);
+                        setSearchList([]);
+                        setSearchText('');
+                      }}>
+                      <div>
+                        {task.taskName.length > 18
+                          ? task.taskName.slice(0, 18) + '...'
+                          : task.taskName}
+                      </div>
+                      <div>{task.typeMessage.typeName}</div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
           <div className='flex items-center'>

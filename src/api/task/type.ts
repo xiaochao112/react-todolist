@@ -53,6 +53,10 @@ export type TUpdateTaskStatusParams = {
   status?: number;
 };
 
+export type TSearchTaskParams = {
+  taskName: string;
+};
+
 export type TResUpdateOrAddTask = {
   code: number;
   message: string;

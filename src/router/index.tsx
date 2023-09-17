@@ -4,6 +4,7 @@ import NavBer from '@components/NavBer/NavBer';
 import { useState } from 'react';
 import LoginAndRegister from '@components/common/LoginAndRegister';
 import { useStateUserInfo } from '@store/hook';
+import { SearchProvider } from '@hooks/useSearch';
 
 function MyRouter() {
   const [showTaskModal, setShowTaskModal] = useState(false);
@@ -14,44 +15,46 @@ function MyRouter() {
   return (
     <>
       <Router>
-        <NavBer
-          onShowTaskModal={() => {
-            if (userInfo.isLogin) {
-              setShowTaskModal(true);
-              setType('add');
-            } else {
+        <SearchProvider>
+          <NavBer
+            onShowTaskModal={() => {
+              if (userInfo.isLogin) {
+                setShowTaskModal(true);
+                setType('add');
+              } else {
+                setIsLoginModalOpen(true);
+              }
+            }}
+            onLogin={() => {
               setIsLoginModalOpen(true);
-            }
-          }}
-          onLogin={() => {
-            setIsLoginModalOpen(true);
-          }}
-        />
-        <Routes>
-          <Route
-            path='/'
-            element={
-              <MyHome
-                onLogin={() => {
-                  setIsLoginModalOpen(true);
-                }}
-                showTaskModal={showTaskModal}
-                cancelTaskModal={() => {
-                  setShowTaskModal(false);
-                }}
-                type={type}
-                setType={setType}
-                onShowTaskModal={() => {
-                  if (userInfo.isLogin) {
-                    setShowTaskModal(true);
-                  } else {
-                    setIsLoginModalOpen(true);
-                  }
-                }}
-              />
-            }
+            }}
           />
-        </Routes>
+          <Routes>
+            <Route
+              path='/'
+              element={
+                <MyHome
+                  onLogin={() => {
+                    setIsLoginModalOpen(true);
+                  }}
+                  showTaskModal={showTaskModal}
+                  cancelTaskModal={() => {
+                    setShowTaskModal(false);
+                  }}
+                  type={type}
+                  setType={setType}
+                  onShowTaskModal={() => {
+                    if (userInfo.isLogin) {
+                      setShowTaskModal(true);
+                    } else {
+                      setIsLoginModalOpen(true);
+                    }
+                  }}
+                />
+              }
+            />
+          </Routes>
+        </SearchProvider>
       </Router>
       <LoginAndRegister
         show={isLoginModalOpen}
