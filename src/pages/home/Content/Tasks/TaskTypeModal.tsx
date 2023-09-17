@@ -4,7 +4,7 @@ import { TaskType } from '@api/task/taskType/type';
 import { useEffect } from 'react';
 import { addTaskType, updateTaskType } from '@api/task/taskType';
 
-type TPorps = {
+type TProps = {
   title: 'add' | 'edit';
   show: boolean;
   handleCancel: () => void;
@@ -15,7 +15,7 @@ const iconlist = Object.keys(icons).filter((item) => {
   // @ts-ignore
   return typeof icons[item] === 'object';
 });
-const TaskTypeModal = ({ title, show, handleCancel, typeInfo, getTaskTypeList }: TPorps) => {
+const TaskTypeModal = ({ title, show, handleCancel, typeInfo, getTaskTypeList }: TProps) => {
   const [form] = Form.useForm();
 
   const onFinish = async () => {

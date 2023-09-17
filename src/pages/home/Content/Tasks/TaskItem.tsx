@@ -5,13 +5,13 @@ import { CarryOutOutlined, DeleteOutlined, QuestionCircleOutlined } from '@ant-d
 import { TTaskItem } from '@api/task/type';
 import dayjs from 'dayjs';
 
-type TPorps = {
+type TProps = {
   item: TTaskItem;
   delItem: () => void;
   onShowTaskModal: () => void;
   onToggleState: (state: boolean) => void;
 };
-function TaskItem({ item, delItem, onShowTaskModal, onToggleState }: TPorps) {
+function TaskItem({ item, delItem, onShowTaskModal, onToggleState }: TProps) {
   const { taskName, status, createTime, taskContent } = item;
   return (
     <>

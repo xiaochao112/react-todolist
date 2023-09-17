@@ -15,13 +15,13 @@ import * as icons from '@ant-design/icons';
 import { useDispatchTaskType, useStateTaskTypeList } from '@store/hook/task';
 import { useStateUserInfo } from '@store/hook';
 
-type TPorps = {
+type TProps = {
   onSearchChange: (data: TSaerchParams) => void; // search数据监听
   goToLigon: () => void;
 };
 const { RangePicker } = DatePicker;
 
-function SliderBar({ onSearchChange, goToLigon }: TPorps) {
+function SliderBar({ onSearchChange, goToLigon }: TProps) {
   const userInfo = useStateUserInfo();
 
   const { stateSetTaskType, stateClearTaskType } = useDispatchTaskType();

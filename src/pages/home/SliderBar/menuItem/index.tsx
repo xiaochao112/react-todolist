@@ -2,7 +2,7 @@ import { HTMLAttributes, ReactNode } from 'react';
 import './index.less';
 import { Popconfirm } from 'antd';
 import { DeleteOutlined, EditOutlined, QuestionCircleOutlined } from '@ant-design/icons';
-interface TPorps extends HTMLAttributes<HTMLDivElement> {
+interface TProps extends HTMLAttributes<HTMLDivElement> {
   text: string;
   icon?: ReactNode;
   checked?: boolean;
@@ -12,7 +12,7 @@ interface TPorps extends HTMLAttributes<HTMLDivElement> {
   onEdit?: () => void;
 }
 
-function MenuItem({ text, icon, checked, isShowDel, isShowEdit, onDel, onEdit, ...args }: TPorps) {
+function MenuItem({ text, icon, checked, isShowDel, isShowEdit, onDel, onEdit, ...args }: TProps) {
   return (
     <>
       <div

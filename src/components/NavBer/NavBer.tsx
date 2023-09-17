@@ -11,7 +11,7 @@ import type { MenuProps } from 'antd';
 import { useEffect, useState } from 'react';
 import { useStateUserInfo, useDispatchUser } from '@store/hook';
 
-type TPorps = {
+type TProps = {
   onShowTaskModal: () => void;
   onLogin: () => void;
 };
@@ -37,7 +37,7 @@ const showConfirm = (
     },
   });
 };
-function NavBer({ onShowTaskModal, onLogin }: TPorps) {
+function NavBer({ onShowTaskModal, onLogin }: TProps) {
   const { stateClearUser } = useDispatchUser();
   const userInfo = useStateUserInfo();
 

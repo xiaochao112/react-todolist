@@ -15,7 +15,7 @@ export type TSaerchParams = {
   endTime: number;
   timeIndex: number;
 };
-type TPorps = {
+type TProps = {
   showTaskModal: boolean;
   cancelTaskModal: () => void;
   onShowTaskModal: () => void;
@@ -31,7 +31,7 @@ function MyHome({
   type,
   setType,
   onLogin,
-}: TPorps) {
+}: TProps) {
   const userInfo = useStateUserInfo();
   const [taskList, setTaskList] = useState<TTaskItem[]>([]);
   const [page, setPage] = useState({ page: 1, pageSize: 10 });

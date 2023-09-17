@@ -15,7 +15,7 @@ import { addTaskItem, updateTaskItem } from '@api/task';
 import { TTaskItem } from '@api/task/type';
 import moment from 'moment';
 
-type TPorps = {
+type TProps = {
   type: 'add' | 'edit';
   show: boolean;
   handleCancel: () => void;
@@ -23,7 +23,7 @@ type TPorps = {
   taskIInfo?: TTaskItem;
   currentTaskType?: number;
 };
-const TaskModal = ({ type, show, handleCancel, handleOk, taskIInfo, currentTaskType }: TPorps) => {
+const TaskModal = ({ type, show, handleCancel, handleOk, taskIInfo, currentTaskType }: TProps) => {
   const [form] = Form.useForm();
   const taskTypeList = useStateTaskTypeList();
 
