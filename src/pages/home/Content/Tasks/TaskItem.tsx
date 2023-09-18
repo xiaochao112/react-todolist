@@ -4,6 +4,7 @@ import './index.less';
 import { CarryOutOutlined, DeleteOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import { TTaskItem } from '@api/task/type';
 import dayjs from 'dayjs';
+import { useSearch } from '@hooks/useSearch';
 
 type TProps = {
   item: TTaskItem;
@@ -13,6 +14,7 @@ type TProps = {
 };
 function TaskItem({ item, delItem, onShowTaskModal, onToggleState }: TProps) {
   const { taskName, status, createTime, taskContent } = item;
+  const { setSearchInfo } = useSearch();
   return (
     <>
       <div className=' w-full task-item relative p-2 rounded-md'>
@@ -20,7 +22,7 @@ function TaskItem({ item, delItem, onShowTaskModal, onToggleState }: TProps) {
           <Checkbox
             checked={status === 1}
             onChange={(e: CheckboxChangeEvent) => {
-              console.log(`checked = ${e.target.checked}`);
+              setSearchInfo(undefined as any);
               onToggleState(e.target.checked);
             }}></Checkbox>
           <a className=' text-sm ml-2 cursor-pointer' onClick={onShowTaskModal}>

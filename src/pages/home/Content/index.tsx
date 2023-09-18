@@ -7,6 +7,8 @@ import { delTaskItem, updateTaskStatus } from '@api/task';
 import { TSaerchParams } from '..';
 import { getFullTimeByIndex, getTimeTextByIndex } from '../util';
 import { useStateUserInfo } from '@store/hook';
+import { useSearch } from '@hooks/useSearch';
+import { useMemo } from 'react';
 
 type TProps = {
   taskList: TTaskItem[];
@@ -17,6 +19,15 @@ type TProps = {
 
 function Content({ taskList, getList, searchTime, onEditTaskModal }: TProps) {
   const userInfo = useStateUserInfo();
+  const { searchInfo, setSearchInfo } = useSearch();
+
+  const tasks = useMemo(() => {
+    if (searchInfo?.taskId) {
+      return [searchInfo];
+    } else {
+      return taskList;
+    }
+  }, [searchInfo, taskList]);
 
   return (
     <>
@@ -29,7 +40,7 @@ function Content({ taskList, getList, searchTime, onEditTaskModal }: TProps) {
             {getFullTimeByIndex(searchTime?.timeIndex, searchTime?.startTime, searchTime?.endTime)}
           </span>
         </div>
-        {taskList?.map((item, index) => (
+        {tasks?.map((item, index) => (
           <TaskItem
             key={index}
             item={item}
@@ -87,15 +98,28 @@ function Content({ taskList, getList, searchTime, onEditTaskModal }: TProps) {
           </div>
         )}
         <div>
-          <Button
-            icon={<PlusCircleOutlined />}
-            type='link'
-            className='mt-5'
-            onClick={() => {
-              onEditTaskModal('add');
-            }}>
-            添加任务
-          </Button>
+          {searchInfo?.taskId ? (
+            <Button
+              icon={<PlusCircleOutlined />}
+              type='link'
+              className='mt-5'
+              onClick={() => {
+                setSearchInfo(undefined as any);
+                getList();
+              }}>
+              恢复搜索
+            </Button>
+          ) : (
+            <Button
+              icon={<PlusCircleOutlined />}
+              type='link'
+              className='mt-5'
+              onClick={() => {
+                onEditTaskModal('add');
+              }}>
+              添加任务
+            </Button>
+          )}
         </div>
       </div>
     </>

@@ -14,6 +14,7 @@ import TaskTypeModal from '../Content/Tasks/TaskTypeModal';
 import * as icons from '@ant-design/icons';
 import { useDispatchTaskType, useStateTaskTypeList } from '@store/hook/task';
 import { useStateUserInfo } from '@store/hook';
+import { useSearch } from '@hooks/useSearch';
 
 type TProps = {
   onSearchChange: (data: TSaerchParams) => void; // search数据监听
@@ -23,6 +24,7 @@ const { RangePicker } = DatePicker;
 
 function SliderBar({ onSearchChange, goToLigon }: TProps) {
   const userInfo = useStateUserInfo();
+  const { searchInfo, setSearchInfo } = useSearch();
 
   const { stateSetTaskType, stateClearTaskType } = useDispatchTaskType();
   const taskTypeList = useStateTaskTypeList();
@@ -40,6 +42,10 @@ function SliderBar({ onSearchChange, goToLigon }: TProps) {
   const taskTypeInfo = useRef<TaskType>();
   // 搜索数据，监听数据变化
   const handleSearch = () => {
+    if (searchInfo?.taskId) {
+      // 如果是搜索则不触发
+      return;
+    }
     const [startTime, endTime] = getTimeByIndex(timeIndex);
     const data = {
       startTime,
@@ -57,10 +63,25 @@ function SliderBar({ onSearchChange, goToLigon }: TProps) {
     }
     onSearchChange(data);
   };
+
   async function getTaskType() {
     const res = await getTaskTypeList();
     stateSetTaskType(res.result!);
   }
+  useEffect(() => {
+    if (!searchInfo?.taskId) {
+      // 如果是搜索则不触发
+      return;
+    }
+    setTaskStatusIndex(searchInfo.status);
+    setTaskTypeIndex(searchInfo.typeId);
+    setTimeIndex(STime.自定义);
+    dateRangeValue.current = [moment(+searchInfo.createTime), moment(+searchInfo.createTime)];
+    const res = dateRangeValue.current?.map((item) => item?.format('YYYY/MM/DD'));
+    const timpStr = [getTimeStringByDate(res![0], 'start'), getTimeStringByDate(res![1], 'end')];
+    timeStr.current = timpStr;
+  }, [searchInfo]);
+
   useEffect(() => {
     let ignore = false;
     if (userInfo.isLogin) {
@@ -96,6 +117,7 @@ function SliderBar({ onSearchChange, goToLigon }: TProps) {
                 icon={item.icon}
                 onClick={() => {
                   if (userInfo.isLogin) {
+                    setSearchInfo(undefined as any);
                     setTimeIndex(item.type);
                   } else {
                     goToLigon();
@@ -109,6 +131,7 @@ function SliderBar({ onSearchChange, goToLigon }: TProps) {
                   value={dateRangeValue.current}
                   defaultValue={dateRangeValue.current}
                   onChange={(data) => {
+                    setSearchInfo(undefined as any);
                     const res = data?.map((item) => item?.format('YYYY/MM/DD'));
                     // ts-ignore
                     const timpStr = [
@@ -135,6 +158,7 @@ function SliderBar({ onSearchChange, goToLigon }: TProps) {
                 icon={item.icon}
                 onClick={() => {
                   if (userInfo.isLogin) {
+                    setSearchInfo(undefined as any);
                     setTaskStatusIndex(index);
                   } else {
                     goToLigon();
@@ -153,6 +177,7 @@ function SliderBar({ onSearchChange, goToLigon }: TProps) {
                 icon={<PlusOutlined className=' flex text-xl' />}
                 onClick={() => {
                   if (userInfo.isLogin) {
+                    setSearchInfo(undefined as any);
                     taskTypeInfo.current = void 0;
                     setShowTaskTypeModal(true);
                   } else {
@@ -172,6 +197,7 @@ function SliderBar({ onSearchChange, goToLigon }: TProps) {
                 checked={item.typeId === taskTypeIndex}
                 icon={renderIcon(item.icon, item.themeColor)}
                 onClick={() => {
+                  setSearchInfo(undefined as any);
                   setTaskTypeIndex(item.typeId);
                 }}
                 onDel={() => {
