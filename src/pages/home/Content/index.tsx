@@ -56,7 +56,7 @@ function Content({ taskList, getList, searchTime, onEditTaskModal }: TProps) {
               const res = await updateTaskStatus(data);
               if (res.code === 200) {
                 notification.info({
-                  message: state ? '任务已完成' : '任务未完成',
+                  message: state ? '任务已完成' : '恢复任务',
                   description: (
                     <>
                       <p className='text-base'>{item.taskName}</p>
@@ -90,7 +90,7 @@ function Content({ taskList, getList, searchTime, onEditTaskModal }: TProps) {
             }}
           />
         ))}
-        {!taskList.length && (
+        {!tasks.length && (
           <div className=' w-full flex justify-center flex-col items-center mt-10'>
             <img src={empty} alt='' />
             <p className=' font-bold'>准备做点什么呢？😄</p>
@@ -105,7 +105,6 @@ function Content({ taskList, getList, searchTime, onEditTaskModal }: TProps) {
               className='mt-5'
               onClick={() => {
                 setSearchInfo(undefined as any);
-                getList();
               }}>
               恢复搜索
             </Button>

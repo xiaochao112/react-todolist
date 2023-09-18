@@ -43,7 +43,14 @@ function SliderBar({ onSearchChange, goToLigon }: TProps) {
   // 搜索数据，监听数据变化
   const handleSearch = () => {
     if (searchInfo?.taskId) {
-      // 如果是搜索则不触发
+      // 如果是搜索
+      setTaskStatusIndex(searchInfo.status);
+      setTaskTypeIndex(searchInfo.typeId);
+      setTimeIndex(STime.自定义);
+      dateRangeValue.current = [moment(+searchInfo.createTime), moment(+searchInfo.createTime)];
+      const res = dateRangeValue.current?.map((item) => item?.format('YYYY/MM/DD'));
+      const timpStr = [getTimeStringByDate(res![0], 'start'), getTimeStringByDate(res![1], 'end')];
+      timeStr.current = timpStr;
       return;
     }
     const [startTime, endTime] = getTimeByIndex(timeIndex);
@@ -69,20 +76,6 @@ function SliderBar({ onSearchChange, goToLigon }: TProps) {
     stateSetTaskType(res.result!);
   }
   useEffect(() => {
-    if (!searchInfo?.taskId) {
-      // 如果是搜索则不触发
-      return;
-    }
-    setTaskStatusIndex(searchInfo.status);
-    setTaskTypeIndex(searchInfo.typeId);
-    setTimeIndex(STime.自定义);
-    dateRangeValue.current = [moment(+searchInfo.createTime), moment(+searchInfo.createTime)];
-    const res = dateRangeValue.current?.map((item) => item?.format('YYYY/MM/DD'));
-    const timpStr = [getTimeStringByDate(res![0], 'start'), getTimeStringByDate(res![1], 'end')];
-    timeStr.current = timpStr;
-  }, [searchInfo]);
-
-  useEffect(() => {
     let ignore = false;
     if (userInfo.isLogin) {
       getTaskTypeList().then((res) => {
@@ -101,7 +94,7 @@ function SliderBar({ onSearchChange, goToLigon }: TProps) {
   useEffect(() => {
     handleSearch();
     return () => {};
-  }, [timeIndex, taskStatusIndex, taskTypeIndex]);
+  }, [timeIndex, taskStatusIndex, taskTypeIndex, searchInfo]);
 
   return (
     <>
