@@ -19,7 +19,8 @@ function useRegister(): TResLogin {
   const onFinish = async (values: TUserRegisterParams) => {
     setBtnLoad(true);
     try {
-      values.password = await encrypt(values.password);
+      // values.password = await encrypt(values.password);
+      values.password = window.btoa(values.password + 'snow-todolist');
       const res = await register(values);
       if (res.code === 200) {
         message.success(res.result);
